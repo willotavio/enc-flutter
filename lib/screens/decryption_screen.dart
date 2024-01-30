@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 
-class EncryptionScreen extends StatelessWidget{
+class DecryptionScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context){
-    TextEditingController _textToEncryptController = TextEditingController();
-    TextEditingController _encryptionKeyController = TextEditingController();
+    TextEditingController _textToDecryptController = TextEditingController();
+    TextEditingController _decryptionKeyController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
-    
-    String? _validateTextToEncrypt(String? value){
+
+    String? _validateTextToDecrypt(String? value){
       if(value == null || value.isEmpty){
-        return "Enter at least 1 character (*/-д-)/";
+        return 'Enter something to be encrypted (*/•_•)/';
       }
       return null;
     }
-    String? _validateEncryptionKey(String? value){
+    String? _validateDecryptionKey(String? value){
       if(value == null || value.isEmpty){
-        return "Provide a key (*/-д-)/";
+        return 'Enter the decryption key (*/•_•)/';
       }
-      if(value.length != 16){
-        return "The key must have 16 characters (*/-д-)/";
+      else if(value.length != 16){
+        return 'Decryption key must have 16 characters (*/•_•)/';
       }
       return null;
     }
@@ -32,37 +32,37 @@ class EncryptionScreen extends StatelessWidget{
             child: Column(
               children: [
                 TextFormField(
-                  controller: _textToEncryptController,
-                  validator: _validateTextToEncrypt,
+                  controller: _textToDecryptController,
+                  validator: _validateTextToDecrypt,
                   obscureText: true,
                   decoration: InputDecoration(
-                    labelText: "Enter a text to encrypt"
+                    labelText: "Enter a text to decrypt",
                   ),
                 ),
                 SizedBox(height: 20),
                 TextFormField(
-                  controller: _encryptionKeyController,
-                  validator: _validateEncryptionKey,
+                  controller: _decryptionKeyController,
+                  validator: _validateDecryptionKey,
                   obscureText: true,
                   decoration: InputDecoration(
-                    labelText: "Enter the encryption key",
+                    labelText: "Enter the decryption key",
                   ),
                   maxLength: 16,
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    fixedSize: Size(100, 50),
-                  ),
                   onPressed: () {
                     if(_formKey.currentState?.validate() ?? false){
-                      print(_textToEncryptController.text); 
+                      print(_textToDecryptController.text);
                     }
-                  }, 
-                  child: Text("Encrypt"),
+                  },
+                  child: Text("Decrypt"),
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: Size(100,50),
+                  ),
                 ),
               ],
-            ),
+            ),  
           ),
         ),
       ),

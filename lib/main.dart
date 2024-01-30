@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './screens/encryption_screen.dart';
+import './screens/decryption_screen.dart';
 
 void main(){
   runApp(MainApp());
@@ -36,7 +37,7 @@ class _HomePageState extends State<HomePage> {
       page = EncryptionScreen();
       break;
     case 1:
-      page = Placeholder();
+      page = DecryptionScreen();
       break;
     case 2:
       page = Placeholder();
