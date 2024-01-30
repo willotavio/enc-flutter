@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './screens/encryption_screen.dart';
 
 void main(){
   runApp(MainApp());
@@ -32,7 +33,7 @@ class _HomePageState extends State<HomePage> {
 
    switch(selectedIndex){
     case 0:
-      page = EncryptionWindow();
+      page = EncryptionScreen();
       break;
     case 1:
       page = Placeholder();
@@ -81,43 +82,5 @@ class _HomePageState extends State<HomePage> {
         );
       }
     );
-    
-  }
-}
-
-class EncryptionWindow extends StatelessWidget{
-  @override
-  Widget build(BuildContext context){
-    return Scaffold(
-      body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              children: [
-                TextField(
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: "Enter a text to encrypt"
-                  ),
-                ),
-                TextField(
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: "Enter the encryption password",
-                  ),
-                ),
-                SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    print("asd");
-                  }, 
-                  child: Text("Encrypt"),
-                )
-              ],
-            ),
-          ),
-        ),
-    );
-    
   }
 }
