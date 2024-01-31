@@ -73,7 +73,7 @@ class EncryptionScreen extends StatelessWidget{
                   validator: _validateEncryptionIv,
                   obscureText: true,
                   decoration: InputDecoration(
-                    labelText: "Enter the encryption iv",
+                    labelText: "Enter the encryption IV",
                   ),
                   maxLength: 16,
                 ),

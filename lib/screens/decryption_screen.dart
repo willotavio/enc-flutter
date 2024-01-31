@@ -1,24 +1,42 @@
 import 'package:flutter/material.dart';
+import '../services/cryptographer.dart';
 
 class DecryptionScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     TextEditingController _textToDecryptController = TextEditingController();
     TextEditingController _decryptionKeyController = TextEditingController();
+    TextEditingController _decryptionIvController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
+    TextEditingController _decryptedTextResult = TextEditingController();
 
     String? _validateTextToDecrypt(String? value){
       if(value == null || value.isEmpty){
-        return 'Enter something to be encrypted (*/•_•)/';
+        return "Enter something to be encrypted (*/•_•)/";
       }
       return null;
     }
     String? _validateDecryptionKey(String? value){
       if(value == null || value.isEmpty){
-        return 'Enter the decryption key (*/•_•)/';
+        return "Enter the decryption key (*/•_•)/";
       }
       else if(value.length != 16){
-        return 'Decryption key must have 16 characters (*/•_•)/';
+        return "Decryption key must have 16 characters (*/•_•)/";
+      }
+      else if(value == _decryptionIvController.text){
+        return "The key and the IV must not be equal (*/•_•)/";
+      }
+      return null;
+    }
+    String? _validateDecryptionIv(String? value){
+      if(value == null || value.isEmpty){
+        return "Enter the decryption IV (*/•_•)/";
+      }
+      else if(value.length != 16){
+        return "The IV must have 16 characters";
+      }
+      else if(value == _decryptionKeyController){
+        return "The IV and the key must not be equal (*/•_•)/";
       }
       return null;
     }
@@ -49,17 +67,30 @@ class DecryptionScreen extends StatelessWidget{
                   ),
                   maxLength: 16,
                 ),
+                TextFormField(
+                  controller: _decryptionIvController,
+                  validator: _validateDecryptionIv,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: "Enter the decryption IV"
+                  ),
+                  maxLength: 16,
+                ),
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     if(_formKey.currentState?.validate() ?? false){
-                      print(_textToDecryptController.text);
+                      _decryptedTextResult.text = Cryptographer.decrypt(_textToDecryptController.text, _decryptionKeyController.text, _decryptionIvController.text);
                     }
                   },
                   child: Text("Decrypt"),
                   style: ElevatedButton.styleFrom(
                     fixedSize: Size(100,50),
                   ),
+                ),
+                TextField(
+                  controller: _decryptedTextResult,
+                  readOnly: true,
                 ),
               ],
             ),  
