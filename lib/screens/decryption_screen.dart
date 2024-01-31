@@ -42,58 +42,61 @@ class DecryptionScreen extends StatelessWidget{
     }
 
     return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: _textToDecryptController,
-                  validator: _validateTextToDecrypt,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: "Enter a text to decrypt",
+      body: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: _textToDecryptController,
+                    validator: _validateTextToDecrypt,
+                    decoration: InputDecoration(
+                      labelText: "Enter a text to decrypt",
+                    ),
+                    maxLines: null,
                   ),
-                ),
-                SizedBox(height: 20),
-                TextFormField(
-                  controller: _decryptionKeyController,
-                  validator: _validateDecryptionKey,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: "Enter the decryption key",
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _decryptionKeyController,
+                    validator: _validateDecryptionKey,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: "Enter the decryption key",
+                    ),
+                    maxLength: 16,
                   ),
-                  maxLength: 16,
-                ),
-                TextFormField(
-                  controller: _decryptionIvController,
-                  validator: _validateDecryptionIv,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: "Enter the decryption IV"
+                  TextFormField(
+                    controller: _decryptionIvController,
+                    validator: _validateDecryptionIv,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: "Enter the decryption IV"
+                    ),
+                    maxLength: 16,
                   ),
-                  maxLength: 16,
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    if(_formKey.currentState?.validate() ?? false){
-                      _decryptedTextResult.text = Cryptographer.decrypt(_textToDecryptController.text, _decryptionKeyController.text, _decryptionIvController.text);
-                    }
-                  },
-                  child: Text("Decrypt"),
-                  style: ElevatedButton.styleFrom(
-                    fixedSize: Size(100,50),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      if(_formKey.currentState?.validate() ?? false){
+                        _decryptedTextResult.text = Cryptographer.decrypt(_textToDecryptController.text, _decryptionKeyController.text, _decryptionIvController.text);
+                      }
+                    },
+                    child: Text("Decrypt"),
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: Size(100,50),
+                    ),
                   ),
-                ),
-                TextField(
-                  controller: _decryptedTextResult,
-                  readOnly: true,
-                ),
-              ],
-            ),  
+                  TextField(
+                    controller: _decryptedTextResult,
+                    readOnly: true,
+                    maxLines: null,
+                  ),
+                ],
+              ),  
+            ),
           ),
         ),
       ),

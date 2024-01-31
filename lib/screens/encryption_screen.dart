@@ -43,57 +43,60 @@ class EncryptionScreen extends StatelessWidget{
     }
 
     return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: _textToEncryptController,
-                  validator: _validateTextToEncrypt,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: "Enter a text to encrypt"
+      body: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: _textToEncryptController,
+                    validator: _validateTextToEncrypt,
+                    decoration: InputDecoration(
+                      labelText: "Enter a text to encrypt"
+                    ),
+                    maxLines: null,
                   ),
-                ),
-                SizedBox(height: 20),
-                TextFormField(
-                  controller: _encryptionKeyController,
-                  validator: _validateEncryptionKey,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: "Enter the encryption key",
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _encryptionKeyController,
+                    validator: _validateEncryptionKey,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: "Enter the encryption key",
+                    ),
+                    maxLength: 16,
                   ),
-                  maxLength: 16,
-                ),
-                TextFormField(
-                  controller: _encryptionIvController,
-                  validator: _validateEncryptionIv,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: "Enter the encryption IV",
+                  TextFormField(
+                    controller: _encryptionIvController,
+                    validator: _validateEncryptionIv,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: "Enter the encryption IV",
+                    ),
+                    maxLength: 16,
                   ),
-                  maxLength: 16,
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    fixedSize: Size(100, 50),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: Size(100, 50),
+                    ),
+                    onPressed: () {
+                      if(_formKey.currentState?.validate() ?? false){
+                        _encryptedTextResult.text = Cryptographer.encrypt(_textToEncryptController.text, _encryptionKeyController.text, _encryptionIvController.text);
+                      }
+                    }, 
+                    child: Text("Encrypt"),
                   ),
-                  onPressed: () {
-                    if(_formKey.currentState?.validate() ?? false){
-                      _encryptedTextResult.text = Cryptographer.encrypt(_textToEncryptController.text, _encryptionKeyController.text, _encryptionIvController.text);
-                    }
-                  }, 
-                  child: Text("Encrypt"),
-                ),
-                TextField(
-                  controller: _encryptedTextResult,
-                  readOnly: true,
-                ),
-              ],
+                  TextField(
+                    controller: _encryptedTextResult,
+                    readOnly: true,
+                    maxLines: null,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
