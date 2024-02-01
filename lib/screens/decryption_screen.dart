@@ -42,21 +42,26 @@ class DecryptionScreen extends StatelessWidget{
     }
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Center(
+      body: Center(
+        child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(50.0),
             child: Form(
               key: _formKey,
               child: Column(
                 children: [
-                  TextFormField(
-                    controller: _textToDecryptController,
-                    validator: _validateTextToDecrypt,
-                    decoration: InputDecoration(
-                      labelText: "Enter a text to decrypt",
+                  SingleChildScrollView(
+                    child: Container(
+                      height: 100,
+                      child: TextFormField(
+                        controller: _textToDecryptController,
+                        validator: _validateTextToDecrypt,
+                        decoration: InputDecoration(
+                          labelText: "Enter a text to decrypt",
+                        ),
+                        maxLines: null,
+                      ),
                     ),
-                    maxLines: null,
                   ),
                   SizedBox(height: 20),
                   TextFormField(
@@ -89,10 +94,15 @@ class DecryptionScreen extends StatelessWidget{
                       fixedSize: Size(100,50),
                     ),
                   ),
-                  TextField(
-                    controller: _decryptedTextResult,
-                    readOnly: true,
-                    maxLines: null,
+                  SingleChildScrollView(
+                    child: Container(
+                      height: 100,
+                      child: TextField(
+                        controller: _decryptedTextResult,
+                        readOnly: true,
+                        maxLines: null,
+                      ),
+                    ),
                   ),
                 ],
               ),  

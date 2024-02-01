@@ -51,32 +51,44 @@ class _HomePageState extends State<HomePage> {
         return Scaffold(
           body: Row(
             children: [
-              SafeArea(
-                child: NavigationRail(
-                  destinations: [
-                    NavigationRailDestination(
-                      icon: Icon(Icons.lock),
-                      label: Text("Encrypt"),
+              Center(
+                child: Container(
+                  height: 300,
+                  child: SafeArea(
+                    child: NavigationRail(
+                      extended: constraints.maxWidth >= 600,
+                      destinations: [
+                        NavigationRailDestination(
+                          icon: Icon(Icons.lock),
+                          label: Text("Encryption"),
+                          padding: EdgeInsets.all(8),
+                        ),
+                        NavigationRailDestination(
+                          icon: Icon(Icons.lock_open),
+                          label: Text("Decryption"),
+                          padding: EdgeInsets.all(8),
+                        ),
+                        NavigationRailDestination(
+                          icon: Icon(Icons.autorenew),
+                          label: Text("Reencryption"),
+                          padding: EdgeInsets.all(8),
+                        ),
+                      ],
+                      selectedIndex: selectedIndex,
+                      onDestinationSelected: (value) {
+                        setState(() {
+                          selectedIndex = value;
+                        });
+                      }, 
                     ),
-                    NavigationRailDestination(
-                      icon: Icon(Icons.lock_open),
-                      label: Text("Decryption"),
-                    ),
-                    NavigationRailDestination(
-                      icon: Icon(Icons.autorenew),
-                      label: Text("Reencryption")
-                    ),
-                  ],
-                  selectedIndex: selectedIndex,
-                  onDestinationSelected: (value) {
-                    setState(() {
-                      selectedIndex = value;
-                    });
-                  }, 
+                  ),
                 ),
               ),
               Expanded(
-                child: page,
+                child: Container(
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                  child: page,
+                ),
               ),
             ],
           ),
