@@ -5,8 +5,7 @@ class DecryptionScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     TextEditingController _textToDecryptController = TextEditingController();
-    TextEditingController _decryptionKeyController = TextEditingController();
-    TextEditingController _decryptionIvController = TextEditingController();
+    TextEditingController _decryptionPasswordController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
     TextEditingController _decryptedTextResult = TextEditingController();
 
@@ -16,27 +15,12 @@ class DecryptionScreen extends StatelessWidget{
       }
       return null;
     }
-    String? _validateDecryptionKey(String? value){
+    String? _validateDecryptionPassword(String? value){
       if(value == null || value.isEmpty){
-        return "Enter the decryption key (*/•_•)/";
+        return "Enter the decryption password (*/•_•)/";
       }
-      else if(value.length != 16){
-        return "Decryption key must have 16 characters (*/•_•)/";
-      }
-      else if(value == _decryptionIvController.text){
-        return "The key and the IV must not be equal (*/•_•)/";
-      }
-      return null;
-    }
-    String? _validateDecryptionIv(String? value){
-      if(value == null || value.isEmpty){
-        return "Enter the decryption IV (*/•_•)/";
-      }
-      else if(value.length != 16){
-        return "The IV must have 16 characters";
-      }
-      else if(value == _decryptionKeyController){
-        return "The IV and the key must not be equal (*/•_•)/";
+      else if(value.length < 12){
+        return "Decryption password must have at least 12 characters (*/•_•)/";
       }
       return null;
     }
@@ -65,28 +49,18 @@ class DecryptionScreen extends StatelessWidget{
                   ),
                   SizedBox(height: 20),
                   TextFormField(
-                    controller: _decryptionKeyController,
-                    validator: _validateDecryptionKey,
+                    controller: _decryptionPasswordController,
+                    validator: _validateDecryptionPassword,
                     obscureText: true,
                     decoration: InputDecoration(
-                      labelText: "Enter the decryption key",
+                      labelText: "Enter the decryption password",
                     ),
-                    maxLength: 16,
-                  ),
-                  TextFormField(
-                    controller: _decryptionIvController,
-                    validator: _validateDecryptionIv,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: "Enter the decryption IV"
-                    ),
-                    maxLength: 16,
                   ),
                   SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
                       if(_formKey.currentState?.validate() ?? false){
-                        _decryptedTextResult.text = Cryptographer.decrypt(_textToDecryptController.text, _decryptionKeyController.text, _decryptionIvController.text);
+                        _decryptedTextResult.text = Cryptographer.decrypt(_textToDecryptController.text, _decryptionPasswordController.text);
                       }
                     },
                     child: Text("Decrypt"),

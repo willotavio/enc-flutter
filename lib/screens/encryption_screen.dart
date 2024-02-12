@@ -5,8 +5,7 @@ class EncryptionScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     TextEditingController _textToEncryptController = TextEditingController();
-    TextEditingController _encryptionKeyController = TextEditingController();
-    TextEditingController _encryptionIvController = TextEditingController();
+    TextEditingController _encryptionPasswordController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
     TextEditingController _encryptedTextResult = TextEditingController();
     
@@ -16,28 +15,12 @@ class EncryptionScreen extends StatelessWidget{
       }
       return null;
     }
-    String? _validateEncryptionKey(String? value){
+    String? _validateEncryptionPassword(String? value){
       if(value == null || value.isEmpty){
-        return "Provide a key (*/-д-)/";
+        return "Provide a password (*/-д-)/";
       }
-      else if(value.length != 16){
-        return "The key must have 16 characters (*/-д-)/";
-      }
-      else if(value == _encryptionIvController.text){
-        return "The key and the IV must not be equal (*/-д-)/";
-      }
-      return null;
-    }
-
-    String? _validateEncryptionIv(String? value){
-      if(value == null || value.isEmpty){
-        return "Provide an IV (*/-д-)/";
-      }
-      else if(value.length != 16){
-        return "The IV must have 16 characters (*/-д-)/";
-      }
-      else if(value == _encryptionKeyController.text){
-        return "The IV and the key must not be equal (*/-д-)/";
+      else if(value.length < 12){
+        return "The password must have at least 12 characters (*/-д-)/";
       }
       return null;
     }
@@ -66,22 +49,12 @@ class EncryptionScreen extends StatelessWidget{
                   ),
                   SizedBox(height: 20),
                   TextFormField(
-                    controller: _encryptionKeyController,
-                    validator: _validateEncryptionKey,
+                    controller: _encryptionPasswordController,
+                    validator: _validateEncryptionPassword,
                     obscureText: true,
                     decoration: InputDecoration(
-                      labelText: "Enter the encryption key",
+                      labelText: "Enter the encryption password",
                     ),
-                    maxLength: 16,
-                  ),
-                  TextFormField(
-                    controller: _encryptionIvController,
-                    validator: _validateEncryptionIv,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: "Enter the encryption IV",
-                    ),
-                    maxLength: 16,
                   ),
                   SizedBox(height: 20),
                   ElevatedButton(
@@ -90,7 +63,7 @@ class EncryptionScreen extends StatelessWidget{
                     ),
                     onPressed: () {
                       if(_formKey.currentState?.validate() ?? false){
-                        _encryptedTextResult.text = Cryptographer.encrypt(_textToEncryptController.text, _encryptionKeyController.text, _encryptionIvController.text);
+                        _encryptedTextResult.text = Cryptographer.encrypt(_textToEncryptController.text, _encryptionPasswordController.text);
                       }
                     }, 
                     child: Text("Encrypt"),
