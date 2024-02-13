@@ -1,3 +1,4 @@
+import 'package:enc_flutter/screens/reencryption_screen.dart';
 import 'package:flutter/material.dart';
 import './screens/encryption_screen.dart';
 import './screens/decryption_screen.dart';
@@ -40,7 +41,7 @@ class _HomePageState extends State<HomePage> {
       page = DecryptionScreen();
       break;
     case 2:
-      page = Placeholder();
+      page = ReencryptionScreen();
       break;
     default:
       throw UnimplementedError('No widget for $selectedIndex');
