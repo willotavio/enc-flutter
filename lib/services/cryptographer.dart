@@ -85,6 +85,17 @@ class Cryptographer{
     }
   }
 
+  static String reencrypt(String encryptedInfo, String oldPassword, String newPassword){
+    try{
+      final decryptedInfo = decrypt(encryptedInfo, oldPassword);
+      final reencryptedInfo = encrypt(decryptedInfo, newPassword);
+      return reencryptedInfo;
+    }
+    catch(error){
+      return "Error (*>•л•)>";
+    }
+  }
+
   static Uint8List generateSalt(){
     try{
       final random = Random.secure();
