@@ -122,7 +122,7 @@ class Cryptographer{
         keyLength + ivLength
       );
 
-      final pbkdf2 = PBKDF2KeyDerivator(HMac(SHA256Digest(), keyLength + ivLength))..init(pbkdf2Parameters);
+      final pbkdf2 = KeyDerivator("SHA-256/HMAC/PBKDF2")..init(pbkdf2Parameters);
 
       final keyAndIv = pbkdf2.process(Uint8List.fromList(utf8.encode(password)));
 
