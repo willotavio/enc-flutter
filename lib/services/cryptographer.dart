@@ -5,7 +5,11 @@ import "package:pointycastle/export.dart";
 
 class Cryptographer{
   
-  static String encrypt(String textToEncrypt, String password){
+  static (bool, String) cryptographerResult(Map<String, dynamic> json){
+    return (json["status"] as bool, json["message"] as String);
+  }
+
+  static (bool, String) encrypt(String textToEncrypt, String password){
     try{
       if(textToEncrypt.isNotEmpty && password.length >= 12){
         final salt = generateSalt();
@@ -24,7 +28,7 @@ class Cryptographer{
         final encryptedText = base64.encode(encryptedBytes);
         final base64Salt = base64.encode(salt);
 
-        return "$encryptedText | $base64Salt";
+        return cryptographerResult({ "status": true, "message": "$encryptedText | $base64Salt" });
       }
       else{
         String message = "";
@@ -37,15 +41,15 @@ class Cryptographer{
         else if(password.length < 12){
           message = "Password must have at least 12 characters (`>-л-)>";
         }
-        return message;
+        return cryptographerResult({ "status": false, "message": message });
       }
     }
     catch(error){
-      return "Error (*>•л•)>";
+      return cryptographerResult({ "status": false, "message": "Error (*>•л•)>" });
     }
   }
 
-  static String decrypt(String encryptedInfo, String password){
+  static (bool, String) decrypt(String encryptedInfo, String password){
     try{
       if(encryptedInfo.isNotEmpty && password.length >= 12){
         final encryptedText = encryptedInfo.split(" | ")[0];
@@ -64,7 +68,7 @@ class Cryptographer{
 
         final decryptedBytes = Uint8List.fromList(cipher.process(encryptedTextBytes));
 
-        return utf8.decode(decryptedBytes);
+        return cryptographerResult({ "status": true, "message": utf8.decode(decryptedBytes) });
       }
       else{
         String message = "";
@@ -77,22 +81,28 @@ class Cryptographer{
         else if(password.length < 12){
           message = "The password must at least 12 characters \\(-д-\\*)";
         }
-        return message;
+        return cryptographerResult({ "status": false, "message": message });
       }
     }
     catch(error){
-      return "Error (*>•л•)>";
+      return cryptographerResult({ "status": false, "message": "Error (*>•л•)>" });
     }
   }
 
-  static String reencrypt(String encryptedInfo, String oldPassword, String newPassword){
+  static (bool, String) reencrypt(String encryptedInfo, String oldPassword, String newPassword){
     try{
       final decryptedInfo = decrypt(encryptedInfo, oldPassword);
-      final reencryptedInfo = encrypt(decryptedInfo, newPassword);
+      if(!decryptedInfo.$1){
+        return cryptographerResult({ "status": false, "message": "Error (*>•л•)>" });
+      }
+      final reencryptedInfo = encrypt(decryptedInfo.$2, newPassword);
+      if(!reencryptedInfo.$1){
+        return cryptographerResult({ "status": false, "message": "Error (*>•л•)>" });
+      }
       return reencryptedInfo;
     }
     catch(error){
-      return "Error (*>•л•)>";
+      return cryptographerResult({ "status": false, "message": "Error (*>•л•)>" });
     }
   }
 

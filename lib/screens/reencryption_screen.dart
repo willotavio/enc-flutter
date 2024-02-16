@@ -82,7 +82,8 @@ class ReencryptionScreen extends StatelessWidget{
                     ),
                     onPressed: () {
                       if(_formKey.currentState?.validate() ?? false){
-                        _reencryptionResult.text = Cryptographer.reencrypt(_textToReencryptController.text, _reencryptionOldPasswordController.text, _reencryptionNewPasswordController.text);
+                        final result = Cryptographer.reencrypt(_textToReencryptController.text, _reencryptionOldPasswordController.text, _reencryptionNewPasswordController.text);
+                        _reencryptionResult.text = result.$2;
                       }
                     },
                     child: Text("Reencrypt"),

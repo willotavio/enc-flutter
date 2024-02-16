@@ -63,7 +63,8 @@ class EncryptionScreen extends StatelessWidget{
                     ),
                     onPressed: () {
                       if(_formKey.currentState?.validate() ?? false){
-                        _encryptedTextResult.text = Cryptographer.encrypt(_textToEncryptController.text, _encryptionPasswordController.text);
+                        final result = Cryptographer.encrypt(_textToEncryptController.text, _encryptionPasswordController.text);
+                        _encryptedTextResult.text = result.$2;
                       }
                     }, 
                     child: Text("Encrypt"),

@@ -60,7 +60,8 @@ class DecryptionScreen extends StatelessWidget{
                   ElevatedButton(
                     onPressed: () {
                       if(_formKey.currentState?.validate() ?? false){
-                        _decryptedTextResult.text = Cryptographer.decrypt(_textToDecryptController.text, _decryptionPasswordController.text);
+                        final result = Cryptographer.decrypt(_textToDecryptController.text, _decryptionPasswordController.text);
+                        _decryptedTextResult.text = result.$2;
                       }
                     },
                     child: Text("Decrypt"),
