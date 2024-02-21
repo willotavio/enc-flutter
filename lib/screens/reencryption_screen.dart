@@ -1,5 +1,6 @@
 import 'package:enc_flutter/services/cryptographer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ReencryptionScreen extends StatelessWidget{
   @override
@@ -98,6 +99,16 @@ class ReencryptionScreen extends StatelessWidget{
                       ),
                     ),
                   ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () async{
+                      await Clipboard.setData(ClipboardData(text: _reencryptionResult.text));
+                    },
+                    child: Text("Copy"),
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: Size(100, 50),
+                    ),
+                    ),
                 ],
               ),
             ),
