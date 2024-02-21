@@ -2,13 +2,20 @@ import 'package:flutter/material.dart';
 import '../services/cryptographer.dart';
 import 'package:flutter/services.dart';
 
-class EncryptionScreen extends StatelessWidget{
+class EncryptionScreen extends StatefulWidget{
+  @override
+  State<EncryptionScreen> createState() => _EncryptionScreenState();
+}
+
+class _EncryptionScreenState extends State<EncryptionScreen> {
+  TextEditingController _textToEncryptController = TextEditingController();
+  TextEditingController _encryptionPasswordController = TextEditingController();
+  TextEditingController _encryptedTextResult = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  String copyConfirmation = "";
+
   @override
   Widget build(BuildContext context){
-    TextEditingController _textToEncryptController = TextEditingController();
-    TextEditingController _encryptionPasswordController = TextEditingController();
-    final _formKey = GlobalKey<FormState>();
-    TextEditingController _encryptedTextResult = TextEditingController();
     
     String? _validateTextToEncrypt(String? value){
       if(value == null || value.isEmpty){
@@ -83,13 +90,19 @@ class EncryptionScreen extends StatelessWidget{
                   SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () async{
-                      await Clipboard.setData(ClipboardData(text: _encryptedTextResult.text));
+                      if(_encryptedTextResult.text.isNotEmpty){
+                        await Clipboard.setData(ClipboardData(text: _encryptedTextResult.text));
+                        setState(() {
+                          copyConfirmation = "Copied (/•v•)/!";
+                        });
+                      }
                     },
                     child: Text("Copy"),
                     style: ElevatedButton.styleFrom(
                       fixedSize: Size(100, 50),
                     ),
                     ),
+                  Text(copyConfirmation),
                 ],
               ),
             ),

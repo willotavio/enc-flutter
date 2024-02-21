@@ -2,15 +2,21 @@ import 'package:enc_flutter/services/cryptographer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class ReencryptionScreen extends StatelessWidget{
+class ReencryptionScreen extends StatefulWidget{
+  @override
+  State<ReencryptionScreen> createState() => _ReencryptionScreenState();
+}
+
+class _ReencryptionScreenState extends State<ReencryptionScreen>{
+  TextEditingController _textToReencryptController = TextEditingController();
+  TextEditingController _reencryptionOldPasswordController = TextEditingController();
+  TextEditingController _reencryptionNewPasswordController = TextEditingController();
+  TextEditingController _reencryptionResult = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  String copyConfirmation = "";
+
   @override
   Widget build(BuildContext context){
-    TextEditingController _textToReencryptController = TextEditingController();
-    TextEditingController _reencryptionOldPasswordController = TextEditingController();
-    TextEditingController _reencryptionNewPasswordController = TextEditingController();
-    final _formKey = GlobalKey<FormState>();
-    TextEditingController _reencryptionResult = TextEditingController();
-
     String? _validateTextToReencrypt(String? value){
       if(value == null || value.isEmpty){
         return "Enter at least 1 character (/-ц-)/";
@@ -102,13 +108,19 @@ class ReencryptionScreen extends StatelessWidget{
                   SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () async{
-                      await Clipboard.setData(ClipboardData(text: _reencryptionResult.text));
+                      if(_reencryptionResult.text.isNotEmpty){
+                        await Clipboard.setData(ClipboardData(text: _reencryptionResult.text));
+                        setState(() {
+                          copyConfirmation = "Copied (/•v•)/!";
+                        });
+                      }
                     },
                     child: Text("Copy"),
                     style: ElevatedButton.styleFrom(
                       fixedSize: Size(100, 50),
                     ),
-                    ),
+                  ),
+                  Text(copyConfirmation),
                 ],
               ),
             ),
