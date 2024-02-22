@@ -1,4 +1,4 @@
-import 'package:enc_flutter/services/cryptographer.dart';
+import '../services/cryptographer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -106,19 +106,40 @@ class _ReencryptionScreenState extends State<ReencryptionScreen>{
                     ),
                   ),
                   SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () async{
-                      if(_reencryptionResult.text.isNotEmpty){
-                        await Clipboard.setData(ClipboardData(text: _reencryptionResult.text));
-                        setState(() {
-                          copyConfirmation = "Copied (/•v•)/!";
-                        });
-                      }
-                    },
-                    child: Text("Copy"),
-                    style: ElevatedButton.styleFrom(
-                      fixedSize: Size(100, 50),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () async{
+                          if(_reencryptionResult.text.isNotEmpty){
+                            await Clipboard.setData(ClipboardData(text: _reencryptionResult.text));
+                            setState(() {
+                              copyConfirmation = "Copied (/•v•)/!";
+                            });
+                          }
+                        },
+                        child: Text("Copy"),
+                        style: ElevatedButton.styleFrom(
+                          fixedSize: Size(100, 50),
+                        ),
+                      ),
+                      SizedBox(width: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          _textToReencryptController.text = "";
+                          _reencryptionOldPasswordController.text = "";
+                          _reencryptionNewPasswordController.text = "";
+                          _reencryptionResult.text = "";
+                          setState(() {
+                            copyConfirmation = "";
+                          });
+                        },
+                        child: Text("Clear"),
+                        style: ElevatedButton.styleFrom(
+                          fixedSize: Size(100, 50),
+                        ),
+                      ),
+                    ],
                   ),
                   Text(copyConfirmation),
                 ],

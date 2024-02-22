@@ -1,4 +1,4 @@
-import 'package:enc_flutter/screens/reencryption_screen.dart';
+import '../screens/reencryption_screen.dart';
 import 'package:flutter/material.dart';
 import './screens/encryption_screen.dart';
 import './screens/decryption_screen.dart';

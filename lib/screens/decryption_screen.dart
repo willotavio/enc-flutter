@@ -88,19 +88,39 @@ class _DecryptionScreenState extends State<DecryptionScreen> {
                     ),
                   ),
                   SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () async{
-                      if(_decryptedTextResult.text.isNotEmpty){
-                        await Clipboard.setData(ClipboardData(text: _decryptedTextResult.text));
-                        setState(() {
-                          copyConfirmation = "Copied (/•v•)/!";
-                        }); 
-                      }
-                    },
-                    child: Text("Copy"),
-                    style: ElevatedButton.styleFrom(
-                      fixedSize: Size(100, 50),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () async{
+                          if(_decryptedTextResult.text.isNotEmpty){
+                            await Clipboard.setData(ClipboardData(text: _decryptedTextResult.text));
+                            setState(() {
+                              copyConfirmation = "Copied (/•v•)/!";
+                            }); 
+                          }
+                        },
+                        child: Text("Copy"),
+                        style: ElevatedButton.styleFrom(
+                          fixedSize: Size(100, 50),
+                        ),
+                      ),
+                      SizedBox(width: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          _textToDecryptController.text = "";
+                          _decryptionPasswordController.text = "";
+                          _decryptedTextResult.text = "";
+                          setState(() {
+                            copyConfirmation = "";
+                          });
+                        },
+                        child: Text("Clear"),
+                        style: ElevatedButton.styleFrom(
+                          fixedSize: Size(100, 50)
+                        ),
+                      )
+                    ],
                   ),
                   Text(copyConfirmation),
                 ],
