@@ -89,7 +89,7 @@ class _ReencryptionScreenState extends State<ReencryptionScreen>{
                     ),
                     onPressed: () {
                       if(_formKey.currentState?.validate() ?? false){
-                        final result = Cryptographer.reencrypt(_textToReencryptController.text, _reencryptionOldPasswordController.text, _reencryptionNewPasswordController.text);
+                        final result = Cryptographer.reencrypt(_textToReencryptController.text.split(" | ")[0], _textToReencryptController.text.split(" | ")[1], _reencryptionOldPasswordController.text, _reencryptionNewPasswordController.text);
                         _reencryptionResult.text = result.$2;
                       }
                     },

@@ -68,7 +68,7 @@ class _DecryptionScreenState extends State<DecryptionScreen> {
                   ElevatedButton(
                     onPressed: () {
                       if(_formKey.currentState?.validate() ?? false){
-                        final result = Cryptographer.decrypt(_textToDecryptController.text, _decryptionPasswordController.text);
+                        final result = Cryptographer.decrypt(_textToDecryptController.text.split(" | ")[0], _textToDecryptController.text.split(" | ")[1], _decryptionPasswordController.text);
                         _decryptedTextResult.text = result.$2;
                       }
                     },

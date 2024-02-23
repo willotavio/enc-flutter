@@ -49,11 +49,9 @@ class Cryptographer{
     }
   }
 
-  static (bool, String) decrypt(String encryptedInfo, String password){
+  static (bool, String) decrypt(String encryptedText, String base64Salt, String password){
     try{
-      if(encryptedInfo.isNotEmpty && password.length >= 12){
-        final encryptedText = encryptedInfo.split(" | ")[0];
-        final base64Salt = encryptedInfo.split(" | ")[1];
+      if(encryptedText.isNotEmpty && base64Salt.isNotEmpty && password.length >= 12){
         final salt = base64.decode(base64Salt);
         
         final keyAndIv = deriveKeyAndIv(password, salt);
@@ -72,8 +70,11 @@ class Cryptographer{
       }
       else{
         String message = "";
-        if(encryptedInfo.isEmpty){
+        if(encryptedText.isEmpty){
           message = "Provide something to be decrypted \\(-д-\\*)";
+        }
+        else if(base64Salt.isEmpty){
+          message = "Provide the salt \\(-д-\\*)";
         }
         else if(password.isEmpty){
           message = "Provide a password \\(-д-\\*)";
@@ -89,9 +90,9 @@ class Cryptographer{
     }
   }
 
-  static (bool, String) reencrypt(String encryptedInfo, String oldPassword, String newPassword){
+  static (bool, String) reencrypt(String encryptedText, String base64Salt, String oldPassword, String newPassword){
     try{
-      final decryptedInfo = decrypt(encryptedInfo, oldPassword);
+      final decryptedInfo = decrypt(encryptedText, base64Salt, oldPassword);
       if(!decryptedInfo.$1){
         return cryptographerResult({ "status": false, "message": "Error (*>•л•)>" });
       }
