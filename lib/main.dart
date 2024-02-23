@@ -14,7 +14,7 @@ class MainApp extends StatelessWidget{
     return MaterialApp(
       title: "Enc-Flutter",
       darkTheme: ThemeData.dark(
-        useMaterial3: true,
+        useMaterial3: true
       ),
       home: HomePage()
     );
@@ -50,49 +50,23 @@ class _HomePageState extends State<HomePage> {
     return LayoutBuilder(
       builder: (context, constraints){
         return Scaffold(
-          body: Row(
-            children: [
-              Center(
-                child: Container(
-                  height: 300,
-                  child: SafeArea(
-                    child: NavigationRail(
-                      extended: constraints.maxWidth >= 600,
-                      destinations: [
-                        NavigationRailDestination(
-                          icon: Icon(Icons.lock),
-                          label: Text("Encryption"),
-                          padding: EdgeInsets.all(8),
-                        ),
-                        NavigationRailDestination(
-                          icon: Icon(Icons.lock_open),
-                          label: Text("Decryption"),
-                          padding: EdgeInsets.all(8),
-                        ),
-                        NavigationRailDestination(
-                          icon: Icon(Icons.autorenew),
-                          label: Text("Reencryption"),
-                          padding: EdgeInsets.all(8),
-                        ),
-                      ],
-                      selectedIndex: selectedIndex,
-                      onDestinationSelected: (value) {
-                        setState(() {
-                          selectedIndex = value;
-                        });
-                      }, 
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  color: Theme.of(context).colorScheme.primaryContainer,
-                  child: page,
-                ),
-              ),
-            ],
+          appBar: AppBar(
+            title: Text("EncUrStuff", style: TextStyle(fontSize: 18)),
           ),
+          bottomNavigationBar: BottomNavigationBar(
+            items: [
+              BottomNavigationBarItem(icon: Icon(Icons.lock), label: "Encrypt"),
+              BottomNavigationBarItem(icon: Icon(Icons.lock_open), label: "Decrypt"),
+              BottomNavigationBarItem(icon: Icon(Icons.autorenew), label: "Reencrypt"),
+            ],
+            currentIndex: selectedIndex,
+            onTap: (value) => {
+              setState(() {
+                selectedIndex = value;
+              })
+            },
+          ),
+          body: page,
         );
       }
     );
