@@ -1,4 +1,7 @@
+import 'package:enc_flutter/services/encryptedText.dart';
+import 'package:enc_flutter/services/encryptedTextService.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 import '../services/cryptographer.dart';
 import 'package:flutter/services.dart';
 
@@ -101,6 +104,19 @@ class _EncryptionScreenState extends State<EncryptionScreen> {
                           }
                         },
                         child: Text("Copy"),
+                        style: ElevatedButton.styleFrom(
+                          fixedSize: Size(100, 50),
+                        ),
+                      ),
+                      SizedBox(width: 20),
+                      ElevatedButton(
+                        onPressed: () async {
+                          if(_encryptedTextResult.text.isNotEmpty){
+                            await EncryptedTextService.insertEncryptedText(EncryptedText(id: Uuid().v4(), encryptedText: _encryptedTextResult.text));
+                            setState(() {});
+                          }
+                        },
+                        child: Text("Save"),
                         style: ElevatedButton.styleFrom(
                           fixedSize: Size(100, 50),
                         ),
