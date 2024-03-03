@@ -1,3 +1,5 @@
+import 'package:enc_flutter/screens/encrypted_texts_list.dart';
+
 import '../screens/reencryption_screen.dart';
 import 'package:flutter/material.dart';
 import './screens/encryption_screen.dart';
@@ -27,32 +29,89 @@ class HomePage extends StatefulWidget{
 }
 
 class _HomePageState extends State<HomePage> {
-  var selectedIndex = 0;
+  int selectedIndex = 0;
   @override
   Widget build(BuildContext context){
-
     Widget page;
+    switch(selectedIndex){
+      case 0:
+        page = EncrypterScreen();
+        break;
+      case 1:
+        page = EncryptedTextsList();
+        break;
+      default:
+        throw UnimplementedError("No widget for $selectedIndex");
+    }
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("EncUrStuff", style: TextStyle(fontSize: 18)),
+      ),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 80,
+              child: DrawerHeader(
+                child: Text("EncUrStuff"),
+              ),
+            ),
+            ListTile(
+              selected: selectedIndex == 0,
+              leading: Icon(Icons.lock),
+              title: Text("Encrypter"),
+              onTap: () {
+                setState(() {
+                  selectedIndex = 0;
+                  Navigator.pop(context);
+                });
+              },
+            ),
+            ListTile(
+              selected: selectedIndex == 1,
+              leading: Icon(Icons.list),
+              title: Text("Encrypted List"),
+              onTap: () {
+                setState(() {
+                  selectedIndex = 1;
+                  Navigator.pop(context);
+                });
+              }
+            ),
+          ],
+        ),
+      ),
+      body: page,
+    );
+  }
+}
 
-   switch(selectedIndex){
-    case 0:
-      page = EncryptionScreen();
-      break;
-    case 1:
-      page = DecryptionScreen();
-      break;
-    case 2:
-      page = ReencryptionScreen();
-      break;
-    default:
-      throw UnimplementedError('No widget for $selectedIndex');
-   }
+class EncrypterScreen extends StatefulWidget{
+  @override
+  State<EncrypterScreen> createState() => _EncrypterScreenState();
+}
 
+class _EncrypterScreenState extends State<EncrypterScreen>{
+  var selectedIndex = 0;
+  @override
+  Widget build(BuildContext build){
+    Widget page;
+    switch(selectedIndex){
+      case 0:
+        page = EncryptionScreen();
+        break;
+      case 1:
+        page = DecryptionScreen();
+        break;
+      case 2:
+        page = ReencryptionScreen();
+        break;
+      default:
+        throw UnimplementedError('No widget for $selectedIndex');
+    }
     return LayoutBuilder(
       builder: (context, constraints){
         return Scaffold(
-          appBar: AppBar(
-            title: Text("EncUrStuff", style: TextStyle(fontSize: 18)),
-          ),
           bottomNavigationBar: BottomNavigationBar(
             items: [
               BottomNavigationBarItem(icon: Icon(Icons.lock), label: "Encrypt"),
