@@ -120,6 +120,8 @@ class _ReencryptionScreenState extends State<ReencryptionScreen>{
                               SnackBar(
                                 content: Text("Copied (/•v•)/!"),
                                 duration: Duration(seconds: 1),
+                                dismissDirection: DismissDirection.horizontal,
+                                showCloseIcon: true,
                               ),
                             );
                           }
@@ -138,6 +140,8 @@ class _ReencryptionScreenState extends State<ReencryptionScreen>{
                               SnackBar(
                                 content: Text("Saved (/•v-)/"),
                                 duration: Duration(seconds: 1),
+                                dismissDirection: DismissDirection.horizontal,
+                                showCloseIcon: true,
                               ),
                             );
                             setState(() {});

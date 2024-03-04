@@ -101,6 +101,8 @@ class _EncryptionScreenState extends State<EncryptionScreen> {
                               SnackBar(
                                 content: Text("Copied (/•v•)/!"),
                                 duration: Duration(seconds: 1),
+                                dismissDirection: DismissDirection.horizontal,
+                                showCloseIcon: true,
                               ),
                             );
                           }
@@ -119,6 +121,8 @@ class _EncryptionScreenState extends State<EncryptionScreen> {
                               SnackBar(
                                 content: Text("Saved (/•v-)/"),
                                 duration: Duration(seconds: 1),
+                                dismissDirection: DismissDirection.horizontal,
+                                showCloseIcon: true,
                               ),
                             );
                             setState(() {});

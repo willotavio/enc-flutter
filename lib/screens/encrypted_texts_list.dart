@@ -20,6 +20,11 @@ class _EncryptedTextsListState extends State<EncryptedTextsList>{
               child: CircularProgressIndicator(),
             );
           }
+          else if(snapshot.hasData && snapshot.data!.length == 0){
+            return Center(
+              child: Text("There's no encrypted text saved (л-ш-)л"),
+            );
+          }
           return ListView.builder(
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
@@ -46,6 +51,8 @@ class _EncryptedTextsListState extends State<EncryptedTextsList>{
                                           SnackBar(
                                             content: Text("Deleted \\(-v-\\)!"),
                                             duration: Duration(seconds: 1),
+                                            dismissDirection: DismissDirection.horizontal,
+                                            showCloseIcon: true,
                                           ),
                                         );
                                         setState(() {});
@@ -72,10 +79,12 @@ class _EncryptedTextsListState extends State<EncryptedTextsList>{
                         SnackBar(
                           content: Text("Copied (/•v•)/!"),
                           duration: Duration(seconds: 1),
+                          dismissDirection: DismissDirection.horizontal,
+                          showCloseIcon: true,
                         ),
                       );
                     },
-                    child: Text(snapshot.data![index].encryptedText)
+                    child: Text(snapshot.data![index].encryptedText, maxLines: 2),
                   ),
                 );
             },

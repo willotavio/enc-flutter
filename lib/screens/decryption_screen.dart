@@ -98,6 +98,8 @@ class _DecryptionScreenState extends State<DecryptionScreen> {
                               SnackBar(
                                 content: Text("Copied (/•v•)/!"),
                                 duration: Duration(seconds: 1),
+                                dismissDirection: DismissDirection.horizontal,
+                                showCloseIcon: true,
                               ),
                             );
                           }
