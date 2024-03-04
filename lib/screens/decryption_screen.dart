@@ -12,7 +12,6 @@ class _DecryptionScreenState extends State<DecryptionScreen> {
   TextEditingController _decryptionPasswordController = TextEditingController();
   TextEditingController _decryptedTextResult = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  String copyConfirmation = "";
 
   @override
   Widget build(BuildContext context){
@@ -95,9 +94,12 @@ class _DecryptionScreenState extends State<DecryptionScreen> {
                         onPressed: () async{
                           if(_decryptedTextResult.text.isNotEmpty){
                             await Clipboard.setData(ClipboardData(text: _decryptedTextResult.text));
-                            setState(() {
-                              copyConfirmation = "Copied (/•v•)/!";
-                            }); 
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Copied (/•v•)/!"),
+                                duration: Duration(seconds: 1),
+                              ),
+                            );
                           }
                         },
                         child: Text("Copy"),
@@ -111,9 +113,6 @@ class _DecryptionScreenState extends State<DecryptionScreen> {
                           _textToDecryptController.text = "";
                           _decryptionPasswordController.text = "";
                           _decryptedTextResult.text = "";
-                          setState(() {
-                            copyConfirmation = "";
-                          });
                         },
                         child: Text("Clear"),
                         style: ElevatedButton.styleFrom(
@@ -122,7 +121,6 @@ class _DecryptionScreenState extends State<DecryptionScreen> {
                       )
                     ],
                   ),
-                  Text(copyConfirmation),
                 ],
               ),  
             ),

@@ -31,23 +31,29 @@ class _EncryptedTextsListState extends State<EncryptedTextsList>{
                         builder: (context) {
                           return AlertDialog(
                             content: Container(
+                              height: 150,
                               child: Center(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text("Are you sure you want to delete this encrypted text?"),
+                                    SizedBox(height: 20),
                                     ElevatedButton(
                                       onPressed: () async {
                                         await EncryptedTextService.deleteEncryptedText(snapshot.data![index].id);
                                         Navigator.pop(context);
                                         ScaffoldMessenger.of(context).showSnackBar(
                                           SnackBar(
-                                            content: Text("Deleted!"),
+                                            content: Text("Deleted \\(-v-\\)!"),
+                                            duration: Duration(seconds: 1),
                                           ),
                                         );
                                         setState(() {});
                                       },
                                       child: Text("Delete"),
+                                      style: ElevatedButton.styleFrom(
+                                        fixedSize: Size(100, 50),
+                                      ),
                                     ),
                                   ],
                                 )
@@ -64,7 +70,8 @@ class _EncryptedTextsListState extends State<EncryptedTextsList>{
                       await Clipboard.setData(ClipboardData(text: snapshot.data![index].encryptedText));
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text("Copied!"),
+                          content: Text("Copied (/•v•)/!"),
+                          duration: Duration(seconds: 1),
                         ),
                       );
                     },

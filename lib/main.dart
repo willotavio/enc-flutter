@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
         title: Text("EncUrStuff", style: TextStyle(fontSize: 18)),
       ),
       drawer: Drawer(
-        child: Column(
+        child: ListView(
           children: [
             SizedBox(
               height: 80,

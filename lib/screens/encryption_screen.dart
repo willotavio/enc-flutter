@@ -15,7 +15,6 @@ class _EncryptionScreenState extends State<EncryptionScreen> {
   TextEditingController _encryptionPasswordController = TextEditingController();
   TextEditingController _encryptedTextResult = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  String copyConfirmation = "";
 
   @override
   Widget build(BuildContext context){
@@ -98,9 +97,12 @@ class _EncryptionScreenState extends State<EncryptionScreen> {
                         onPressed: () async{
                           if(_encryptedTextResult.text.isNotEmpty){
                             await Clipboard.setData(ClipboardData(text: _encryptedTextResult.text));
-                            setState(() {
-                              copyConfirmation = "Copied (/•v•)/!";
-                            });
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Copied (/•v•)/!"),
+                                duration: Duration(seconds: 1),
+                              ),
+                            );
                           }
                         },
                         child: Text("Copy"),
@@ -113,6 +115,12 @@ class _EncryptionScreenState extends State<EncryptionScreen> {
                         onPressed: () async {
                           if(_encryptedTextResult.text.isNotEmpty){
                             await EncryptedTextService.insertEncryptedText(EncryptedText(id: Uuid().v4(), encryptedText: _encryptedTextResult.text));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Saved (/•v-)/"),
+                                duration: Duration(seconds: 1),
+                              ),
+                            );
                             setState(() {});
                           }
                         },
@@ -127,9 +135,6 @@ class _EncryptionScreenState extends State<EncryptionScreen> {
                           _textToEncryptController.text = "";
                           _encryptionPasswordController.text = "";
                           _encryptedTextResult.text = "";
-                          setState(() {
-                            copyConfirmation = "";
-                          });
                         },
                         child: Text("Clear"),
                         style: ElevatedButton.styleFrom(
@@ -138,7 +143,6 @@ class _EncryptionScreenState extends State<EncryptionScreen> {
                       ),
                     ],
                   ),
-                  Text(copyConfirmation),
                 ],
               ),
             ),

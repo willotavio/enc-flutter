@@ -1,3 +1,7 @@
+import 'package:enc_flutter/services/encryptedText.dart';
+import 'package:enc_flutter/services/encryptedTextService.dart';
+import 'package:uuid/uuid.dart';
+
 import '../services/cryptographer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,7 +17,6 @@ class _ReencryptionScreenState extends State<ReencryptionScreen>{
   TextEditingController _reencryptionNewPasswordController = TextEditingController();
   TextEditingController _reencryptionResult = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  String copyConfirmation = "";
 
   @override
   Widget build(BuildContext context){
@@ -113,12 +116,34 @@ class _ReencryptionScreenState extends State<ReencryptionScreen>{
                         onPressed: () async{
                           if(_reencryptionResult.text.isNotEmpty){
                             await Clipboard.setData(ClipboardData(text: _reencryptionResult.text));
-                            setState(() {
-                              copyConfirmation = "Copied (/•v•)/!";
-                            });
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Copied (/•v•)/!"),
+                                duration: Duration(seconds: 1),
+                              ),
+                            );
                           }
                         },
                         child: Text("Copy"),
+                        style: ElevatedButton.styleFrom(
+                          fixedSize: Size(100, 50),
+                        ),
+                      ),
+                      SizedBox(width: 20),
+                      ElevatedButton(
+                        onPressed: () async {
+                          if(_reencryptionResult.text.isNotEmpty){
+                            await EncryptedTextService.insertEncryptedText(EncryptedText(id: Uuid().v4(), encryptedText: _reencryptionResult.text));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Saved (/•v-)/"),
+                                duration: Duration(seconds: 1),
+                              ),
+                            );
+                            setState(() {});
+                          }
+                        },
+                        child: Text("Save"),
                         style: ElevatedButton.styleFrom(
                           fixedSize: Size(100, 50),
                         ),
@@ -130,9 +155,6 @@ class _ReencryptionScreenState extends State<ReencryptionScreen>{
                           _reencryptionOldPasswordController.text = "";
                           _reencryptionNewPasswordController.text = "";
                           _reencryptionResult.text = "";
-                          setState(() {
-                            copyConfirmation = "";
-                          });
                         },
                         child: Text("Clear"),
                         style: ElevatedButton.styleFrom(
@@ -141,7 +163,6 @@ class _ReencryptionScreenState extends State<ReencryptionScreen>{
                       ),
                     ],
                   ),
-                  Text(copyConfirmation),
                 ],
               ),
             ),
