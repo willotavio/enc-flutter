@@ -90,8 +90,9 @@ class _EncryptionScreenState extends State<EncryptionScreen> {
                     ),
                   ),
                   SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Wrap(
+                    spacing: 20,
+                    runSpacing: 20,
                     children: [
                       ElevatedButton(
                         onPressed: () async{
@@ -112,7 +113,6 @@ class _EncryptionScreenState extends State<EncryptionScreen> {
                           fixedSize: Size(100, 50),
                         ),
                       ),
-                      SizedBox(width: 20),
                       ElevatedButton(
                         onPressed: () async {
                           if(_encryptedTextResult.text.isNotEmpty){
@@ -133,7 +133,6 @@ class _EncryptionScreenState extends State<EncryptionScreen> {
                           fixedSize: Size(100, 50),
                         ),
                       ),
-                      SizedBox(width: 20),
                       ElevatedButton(
                         onPressed: () {
                           _textToEncryptController.text = "";

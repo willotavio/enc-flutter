@@ -109,8 +109,9 @@ class _ReencryptionScreenState extends State<ReencryptionScreen>{
                     ),
                   ),
                   SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Wrap(
+                    spacing: 20,
+                    runSpacing: 20,
                     children: [
                       ElevatedButton(
                         onPressed: () async{
@@ -131,7 +132,6 @@ class _ReencryptionScreenState extends State<ReencryptionScreen>{
                           fixedSize: Size(100, 50),
                         ),
                       ),
-                      SizedBox(width: 20),
                       ElevatedButton(
                         onPressed: () async {
                           if(_reencryptionResult.text.isNotEmpty){
@@ -152,7 +152,6 @@ class _ReencryptionScreenState extends State<ReencryptionScreen>{
                           fixedSize: Size(100, 50),
                         ),
                       ),
-                      SizedBox(width: 20),
                       ElevatedButton(
                         onPressed: () {
                           _textToReencryptController.text = "";
