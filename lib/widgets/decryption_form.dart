@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class DecryptionForm extends StatefulWidget {
+  final String? encryptedText;
+  DecryptionForm({this.encryptedText});
   @override
   State<DecryptionForm> createState() => _DecryptionFormState();
 }
@@ -12,6 +14,14 @@ class _DecryptionFormState extends State<DecryptionForm> {
   TextEditingController _decryptionPasswordController = TextEditingController();
   TextEditingController _decryptedTextResult = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    if(widget.encryptedText != null) {
+      _textToDecryptController.text = widget.encryptedText!;
+    }
+  }
 
   @override
   Widget build(BuildContext) {

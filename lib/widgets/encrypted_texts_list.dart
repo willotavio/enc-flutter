@@ -1,5 +1,6 @@
 import 'package:enc_flutter/services/encryptedTextRepository.dart';
 import 'package:enc_flutter/services/encryptedTextService.dart';
+import 'package:enc_flutter/widgets/decryption_form.dart';
 import 'package:flutter/material.dart';
 import "package:flutter/services.dart";
 
@@ -82,6 +83,16 @@ class _EncryptedTextsListState extends State<EncryptedTextsList>{
                           dismissDirection: DismissDirection.horizontal,
                           showCloseIcon: true,
                         ),
+                      );
+                    },
+                    onLongPress: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Dialog(
+                            child: DecryptionForm(encryptedText: snapshot.data![index].encryptedText),
+                          );
+                        }
                       );
                     },
                     child: Text(snapshot.data![index].encryptedText, maxLines: 2),
