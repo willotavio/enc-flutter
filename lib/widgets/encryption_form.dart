@@ -1,23 +1,23 @@
+import 'package:enc_flutter/services/cryptographer.dart';
 import 'package:enc_flutter/services/encryptedText.dart';
 import 'package:enc_flutter/services/encryptedTextService.dart';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
-import '../services/cryptographer.dart';
 import 'package:flutter/services.dart';
+import 'package:uuid/uuid.dart';
 
-class EncryptionScreen extends StatefulWidget{
+class EncryptionForm extends StatefulWidget{
   @override
-  State<EncryptionScreen> createState() => _EncryptionScreenState();
+  State<EncryptionForm> createState() => _EncryptionFormState();
 }
 
-class _EncryptionScreenState extends State<EncryptionScreen> {
+class _EncryptionFormState extends State<EncryptionForm> {
   TextEditingController _textToEncryptController = TextEditingController();
   TextEditingController _encryptionPasswordController = TextEditingController();
   TextEditingController _encryptedTextResult = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     
     String? _validateTextToEncrypt(String? value){
       if(value == null || value.isEmpty){
@@ -35,8 +35,7 @@ class _EncryptionScreenState extends State<EncryptionScreen> {
       return null;
     }
 
-    return Scaffold(
-      body: Center(
+    return Center(
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(50.0),
@@ -151,7 +150,6 @@ class _EncryptionScreenState extends State<EncryptionScreen> {
             ),
           ),
         ),
-      ),
     );
   }
 }
