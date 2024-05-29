@@ -21,7 +21,9 @@ class DatabaseHelper{
     db.execute('''
       CREATE TABLE encryptedTexts(
         id TEXT PRIMARY KEY,
-        encryptedText TEXT
+        title TEXT NOT NULL,
+        description TEXT,
+        encryptedText TEXT NOT NULL
       )
     ''');
   }
