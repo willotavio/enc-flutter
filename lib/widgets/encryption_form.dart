@@ -1,9 +1,7 @@
 import 'package:enc_flutter/services/cryptographer.dart';
-import 'package:enc_flutter/services/encryptedText.dart';
-import 'package:enc_flutter/services/encryptedTextService.dart';
+import 'package:enc_flutter/widgets/save_encryption_text_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:uuid/uuid.dart';
 
 class EncryptionForm extends StatefulWidget{
   @override
@@ -115,14 +113,16 @@ class _EncryptionFormState extends State<EncryptionForm> {
                       ElevatedButton(
                         onPressed: () async {
                           if(_encryptedTextResult.text.isNotEmpty){
-                            await EncryptedTextService.insertEncryptedText(EncryptedText(id: Uuid().v4(), encryptedText: _encryptedTextResult.text));
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text("Saved (/•v-)/"),
-                                duration: Duration(seconds: 1),
-                                dismissDirection: DismissDirection.horizontal,
-                                showCloseIcon: true,
-                              ),
+                            showDialog(
+                              context: context, 
+                              builder: (context) {
+                                return Dialog(
+                                  child: Container(
+                                    height: 400,
+                                    child: SaveEncryptionTextForm(encryptedTextResult: _encryptedTextResult.text)
+                                  ),
+                                );
+                              }
                             );
                             setState(() {});
                           }
