@@ -1,6 +1,6 @@
-import 'package:enc_flutter/services/encryptedTextRepository.dart';
 import 'package:enc_flutter/services/encryptedTextService.dart';
 import 'package:enc_flutter/widgets/decryption_form.dart';
+import 'package:enc_flutter/widgets/delete_encryption_text.dart';
 import 'package:flutter/material.dart';
 import "package:flutter/services.dart";
 
@@ -14,7 +14,7 @@ class _EncryptedTextsListState extends State<EncryptedTextsList>{
   Widget build(BuildContext context){
     return Center(
       child: FutureBuilder(
-        future: EncryptedTextRepository.getEncryptedTexts(),
+        future: EncryptedTextService.getEncryptedTexts(),
         builder: (context, snapshot) {
           if(!snapshot.hasData){
             return Center(
@@ -39,32 +39,9 @@ class _EncryptedTextsListState extends State<EncryptedTextsList>{
                             content: Container(
                               height: 150,
                               child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text("Are you sure you want to delete this encrypted text?"),
-                                    SizedBox(height: 20),
-                                    ElevatedButton(
-                                      onPressed: () async {
-                                        await EncryptedTextService.deleteEncryptedText(snapshot.data![index].id);
-                                        Navigator.pop(context);
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(
-                                            content: Text("Deleted \\(-v-\\)!"),
-                                            duration: Duration(seconds: 1),
-                                            dismissDirection: DismissDirection.horizontal,
-                                            showCloseIcon: true,
-                                          ),
-                                        );
-                                        setState(() {});
-                                      },
-                                      child: Text("Delete"),
-                                      style: ElevatedButton.styleFrom(
-                                        fixedSize: Size(100, 50),
-                                      ),
-                                    ),
-                                  ],
-                                )
+                                child: DeleteEncryptedText(encryptedText: snapshot.data![0], onDeleteEncryptedText: () {
+                                  setState(() {});
+                                },),
                               ),
                             ), 
                           );
@@ -95,7 +72,7 @@ class _EncryptedTextsListState extends State<EncryptedTextsList>{
                         }
                       );
                     },
-                    child: Text(snapshot.data![index].encryptedText, maxLines: 2),
+                    child: Text(snapshot.data![index].title, maxLines: 2),
                   ),
                 );
             },
