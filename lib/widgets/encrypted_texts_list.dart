@@ -1,6 +1,7 @@
 import 'package:enc_flutter/services/encryptedTextService.dart';
 import 'package:enc_flutter/widgets/decryption_form.dart';
 import 'package:enc_flutter/widgets/delete_encryption_text.dart';
+import 'package:enc_flutter/widgets/edit_encrypted_text.dart';
 import 'package:flutter/material.dart';
 import "package:flutter/services.dart";
 
@@ -29,52 +30,84 @@ class _EncryptedTextsListState extends State<EncryptedTextsList>{
           return ListView.builder(
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
-              return ListTile(
-                  leading: IconButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            content: Container(
-                              height: 150,
-                              child: Center(
-                                child: DeleteEncryptedText(encryptedText: snapshot.data![0], onDeleteEncryptedText: () {
-                                  setState(() {});
-                                },),
-                              ),
-                            ), 
+              return ExpansionTile(
+                leading: IconButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Dialog(
+                          child: DecryptionForm(encryptedText: snapshot.data![index].encryptedText),
+                        );
+                      }
+                    );
+                  },
+                  icon: Icon(Icons.lock_open),
+                ),
+                title: Text(snapshot.data![index].title),
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                content: Container(
+                                  height: 150,
+                                  child: Center(
+                                    child: DeleteEncryptedText(encryptedText: snapshot.data![0], onDeleteEncryptedText: () {
+                                      setState(() {});
+                                    },),
+                                  ),
+                                ), 
+                              );
+                            },
                           );
                         },
-                      );
-                    },
-                    icon: Icon(Icons.delete),
-                  ),
-                  title: TextButton(
-                    onPressed: () async {
-                      await Clipboard.setData(ClipboardData(text: snapshot.data![index].encryptedText));
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text("Copied (/•v•)/!"),
-                          duration: Duration(seconds: 1),
-                          dismissDirection: DismissDirection.horizontal,
-                          showCloseIcon: true,
-                        ),
-                      );
-                    },
-                    onLongPress: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return Dialog(
-                            child: DecryptionForm(encryptedText: snapshot.data![index].encryptedText),
+                        icon: Icon(Icons.delete),
+                      ),
+                      IconButton(
+                        onPressed: () async {
+                          await Clipboard.setData(ClipboardData(text: snapshot.data![index].encryptedText));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Copied (/•v•)/!"),
+                                duration: Duration(seconds: 1),
+                                dismissDirection: DismissDirection.horizontal,
+                                showCloseIcon: true,
+                              ),
+                            );
+                        }, 
+                        icon: Icon(Icons.copy),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context, 
+                            builder: (context) {
+                              return Dialog(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(40.0),
+                                  child: Container(
+                                    height: 400,
+                                    child: EditEncryptedText(encryptedText: snapshot.data![index], onUpdateEncryptedText: () {
+                                      setState(() {});
+                                    }),
+                                  ),
+                                ),
+                              );
+                            }
                           );
-                        }
-                      );
-                    },
-                    child: Text(snapshot.data![index].title, maxLines: 2),
+                        },
+                        icon: Icon(Icons.edit),
+                      ),
+                    ],
                   ),
-                );
+                ]
+              );
             },
           );
         },
