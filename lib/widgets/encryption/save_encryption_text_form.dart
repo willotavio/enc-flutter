@@ -1,5 +1,5 @@
-import 'package:enc_flutter/services/encryptedText.dart';
-import 'package:enc_flutter/services/encryptedTextService.dart';
+import 'package:enc_flutter/services/encrypted_text/encrypted_text.dart';
+import 'package:enc_flutter/services/encrypted_text/encrypted_text_service.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 

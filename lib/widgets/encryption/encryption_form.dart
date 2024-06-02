@@ -1,5 +1,5 @@
-import 'package:enc_flutter/services/cryptographer.dart';
-import 'package:enc_flutter/widgets/save_encryption_text_form.dart';
+import 'package:enc_flutter/services/cryptographer/cryptographer.dart';
+import 'package:enc_flutter/widgets/encryption/save_encryption_text_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

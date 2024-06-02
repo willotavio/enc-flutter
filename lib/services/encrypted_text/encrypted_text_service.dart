@@ -1,5 +1,5 @@
-import 'package:enc_flutter/services/encryptedText.dart';
-import 'package:enc_flutter/services/encryptedTextRepository.dart';
+import 'package:enc_flutter/services/encrypted_text/encrypted_text.dart';
+import 'package:enc_flutter/services/encrypted_text/encrypted_text_repository.dart';
 
 class EncryptedTextService{
   static Future<List<EncryptedText>> getEncryptedTexts() async {

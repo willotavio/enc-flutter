@@ -1,4 +1,4 @@
-import 'package:enc_flutter/widgets/reencryption_form.dart';
+import 'package:enc_flutter/widgets/reencryption/reencryption_form.dart';
 import 'package:flutter/material.dart';
 
 class ReencryptionScreen extends StatefulWidget{

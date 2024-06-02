@@ -1,5 +1,5 @@
-import 'package:enc_flutter/services/databaseHelper.dart';
-import 'package:enc_flutter/services/encryptedText.dart';
+import 'package:enc_flutter/services/database/database_helper.dart';
+import 'package:enc_flutter/services/encrypted_text/encrypted_text.dart';
 import 'package:sqflite/sqflite.dart';
 
 class EncryptedTextRepository{

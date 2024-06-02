@@ -1,7 +1,7 @@
-import 'package:enc_flutter/services/encryptedTextService.dart';
-import 'package:enc_flutter/widgets/decryption_form.dart';
-import 'package:enc_flutter/widgets/delete_encryption_text.dart';
-import 'package:enc_flutter/widgets/edit_encrypted_text.dart';
+import 'package:enc_flutter/services/encrypted_text/encrypted_text_service.dart';
+import 'package:enc_flutter/widgets/decryption/decryption_form.dart';
+import 'package:enc_flutter/widgets/encrypted_texts/delete_encryption_text.dart';
+import 'package:enc_flutter/widgets/encrypted_texts/edit_encrypted_text.dart';
 import 'package:flutter/material.dart';
 import "package:flutter/services.dart";
 

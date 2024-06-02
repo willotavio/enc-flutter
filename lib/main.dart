@@ -1,9 +1,9 @@
-import 'package:enc_flutter/widgets/encrypted_texts_list.dart';
+import 'package:enc_flutter/widgets/encrypted_texts/encrypted_texts_list.dart';
 
-import '../widgets/reencryption_screen.dart';
+import 'widgets/reencryption/reencryption_screen.dart';
 import 'package:flutter/material.dart';
-import './widgets/encryption_screen.dart';
-import './widgets/decryption_screen.dart';
+import './widgets/encryption/encryption_screen.dart';
+import './widgets/decryption/decryption_screen.dart';
 
 void main(){
   runApp(MainApp());

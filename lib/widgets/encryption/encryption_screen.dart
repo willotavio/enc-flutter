@@ -1,4 +1,4 @@
-import 'package:enc_flutter/widgets/encryption_form.dart';
+import 'package:enc_flutter/widgets/encryption/encryption_form.dart';
 import 'package:flutter/material.dart';
 
 class EncryptionScreen extends StatefulWidget{
