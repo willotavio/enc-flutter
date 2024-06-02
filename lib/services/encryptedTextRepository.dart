@@ -17,6 +17,16 @@ class EncryptedTextRepository{
     return await db.insert("encryptedTexts", text.toMap(text));
   }
 
+  static Future<bool> updateEncryptedText(String encryptedTextId, Map<String, dynamic> encryptedTextMap) async {
+    Database db = await DatabaseHelper.instance.database;
+    try {
+      await db.update("encryptedTexts", encryptedTextMap);
+      return true;
+    } catch(error) {
+      throw Exception(error);
+    }
+  }
+
   static Future<int> deleteEncryptedText(String id) async {
     Database db = await DatabaseHelper.instance.database;
     return await db.delete("encryptedTexts", where: "id == ?", whereArgs: [id]);
