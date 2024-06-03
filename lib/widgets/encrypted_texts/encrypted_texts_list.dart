@@ -37,7 +37,10 @@ class _EncryptedTextsListState extends State<EncryptedTextsList>{
                       context: context,
                       builder: (context) {
                         return Dialog(
-                          child: DecryptionForm(encryptedText: snapshot.data![index].encryptedText),
+                          child: Container(
+                            height: 600,
+                            child: DecryptionForm(encryptedText: snapshot.data![index].encryptedText)
+                          ),
                         );
                       }
                     );
