@@ -1,4 +1,4 @@
-import 'package:enc_flutter/services/cryptographer/cryptographer.dart';
+import 'package:enc_flutter/widgets/encryption/encrypt_text_form.dart';
 import 'package:enc_flutter/widgets/encryption/save_encryption_text_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,8 +9,6 @@ class EncryptionForm extends StatefulWidget{
 }
 
 class _EncryptionFormState extends State<EncryptionForm> {
-  TextEditingController _textToEncryptController = TextEditingController();
-  TextEditingController _encryptionPasswordController = TextEditingController();
   TextEditingController _encryptedTextResult = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -41,109 +39,31 @@ class _EncryptionFormState extends State<EncryptionForm> {
               key: _formKey,
               child: Column(
                 children: [
-                  SingleChildScrollView(
-                    child: Container(
-                      height: 100,
-                      child: TextFormField(
-                        controller: _textToEncryptController,
-                        validator: _validateTextToEncrypt,
-                        decoration: InputDecoration(
-                          labelText: "Enter a text to encrypt"
-                        ),
-                        maxLines: null,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  TextFormField(
-                    controller: _encryptionPasswordController,
-                    validator: _validateEncryptionPassword,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: "Enter the encryption password",
-                    ),
-                  ),
+                  EncryptTextForm(onSaveEncryptedText: (String text) {
+                    _encryptedTextResult.text = text;
+                  }),
                   SizedBox(height: 20),
                   ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      fixedSize: Size(100, 50),
-                    ),
-                    onPressed: () {
-                      if(_formKey.currentState?.validate() ?? false){
-                        final result = Cryptographer.encrypt(_textToEncryptController.text, _encryptionPasswordController.text);
-                        _encryptedTextResult.text = result.$2;
-                      }
-                    }, 
-                    child: Text("Encrypt"),
-                  ),
-                  SingleChildScrollView(
-                    child: Container(
-                      height: 100,
-                      child: TextField(
-                        controller: _encryptedTextResult,
-                        readOnly: true,
-                        maxLines: null,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Wrap(
-                    spacing: 20,
-                    runSpacing: 20,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () async{
-                          if(_encryptedTextResult.text.isNotEmpty){
-                            await Clipboard.setData(ClipboardData(text: _encryptedTextResult.text));
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text("Copied (/•v•)/!"),
-                                duration: Duration(seconds: 1),
-                                dismissDirection: DismissDirection.horizontal,
-                                showCloseIcon: true,
+                    onPressed: () async {
+                      if(_encryptedTextResult.text.isNotEmpty){
+                        showDialog(
+                          context: context, 
+                          builder: (context) {
+                            return Dialog(
+                              child: Container(
+                                height: 400,
+                                child: SaveEncryptionTextForm(encryptedTextResult: _encryptedTextResult.text)
                               ),
                             );
                           }
-                        },
-                        child: Text("Copy"),
-                        style: ElevatedButton.styleFrom(
-                          fixedSize: Size(100, 50),
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          if(_encryptedTextResult.text.isNotEmpty){
-                            showDialog(
-                              context: context, 
-                              builder: (context) {
-                                return Dialog(
-                                  child: Container(
-                                    height: 400,
-                                    child: SaveEncryptionTextForm(encryptedTextResult: _encryptedTextResult.text)
-                                  ),
-                                );
-                              }
-                            );
-                            setState(() {});
-                          }
-                        },
-                        child: Text("Save"),
-                        style: ElevatedButton.styleFrom(
-                          fixedSize: Size(100, 50),
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          _textToEncryptController.text = "";
-                          _encryptionPasswordController.text = "";
-                          _encryptedTextResult.text = "";
-                        },
-                        child: Text("Clear"),
-                        style: ElevatedButton.styleFrom(
-                          fixedSize: Size(100, 50),
-                        ),
-                      ),
-                    ],
+                        );
+                        setState(() {});
+                      }
+                    },
+                    child: Text("Save"),
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: Size(100, 50),
+                    ),
                   ),
                 ],
               ),

@@ -1,6 +1,6 @@
 import 'package:enc_flutter/services/encrypted_text/encrypted_text.dart';
 import 'package:enc_flutter/services/encrypted_text/encrypted_text_service.dart';
-import 'package:enc_flutter/widgets/encrypt_text_form.dart';
+import 'package:enc_flutter/widgets/encryption/encrypt_text_form.dart';
 import 'package:flutter/material.dart';
 
 class EditEncryptedText extends StatefulWidget {
@@ -69,8 +69,11 @@ class _EditEncryptedTextState extends State<EditEncryptedText> {
                       height: 600,
                       child: Padding(
                         padding: const EdgeInsets.all(40.0),
+                        // what the encrypt form will do after encrypt will be defined by the widget caller
                         child: EncryptTextForm(encryptedResult: widget.encryptedText.encryptedText, onSaveEncryptedText: (String text) {
                           _encryptedText.text = text;
+                          // in this case, close the modal
+                          Navigator.of(context).pop();
                         }),
                       ),
                     ),
