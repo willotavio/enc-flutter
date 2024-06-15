@@ -49,63 +49,68 @@ class _EncryptedTextsListState extends State<EncryptedTextsList>{
                 ),
                 title: Text(snapshot.data![index].title),
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Column(
                     children: [
-                      IconButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                content: Container(
-                                  height: 150,
-                                  child: Center(
-                                    child: DeleteEncryptedText(encryptedText: snapshot.data![0], onDeleteEncryptedText: () {
-                                      setState(() {});
-                                    },),
-                                  ),
-                                ), 
+                      Text(snapshot.data![index].description ?? ""),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    content: Container(
+                                      height: 150,
+                                      child: Center(
+                                        child: DeleteEncryptedText(encryptedText: snapshot.data![0], onDeleteEncryptedText: () {
+                                          setState(() {});
+                                        },),
+                                      ),
+                                    ), 
+                                  );
+                                },
                               );
                             },
-                          );
-                        },
-                        icon: Icon(Icons.delete),
-                      ),
-                      IconButton(
-                        onPressed: () async {
-                          await Clipboard.setData(ClipboardData(text: snapshot.data![index].encryptedText));
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text("Copied (/•v•)/!"),
-                                duration: Duration(seconds: 1),
-                                dismissDirection: DismissDirection.horizontal,
-                                showCloseIcon: true,
-                              ),
-                            );
-                        }, 
-                        icon: Icon(Icons.copy),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context, 
-                            builder: (context) {
-                              return Dialog(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(40.0),
-                                  child: Container(
-                                    height: 400,
-                                    child: EditEncryptedText(encryptedText: snapshot.data![index], onUpdateEncryptedText: () {
-                                      setState(() {});
-                                    }),
+                            icon: Icon(Icons.delete),
+                          ),
+                          IconButton(
+                            onPressed: () async {
+                              await Clipboard.setData(ClipboardData(text: snapshot.data![index].encryptedText));
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text("Copied (/•v•)/!"),
+                                    duration: Duration(seconds: 1),
+                                    dismissDirection: DismissDirection.horizontal,
+                                    showCloseIcon: true,
                                   ),
-                                ),
+                                );
+                            }, 
+                            icon: Icon(Icons.copy),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context, 
+                                builder: (context) {
+                                  return Dialog(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(40.0),
+                                      child: Container(
+                                        height: 300,
+                                        child: EditEncryptedText(encryptedText: snapshot.data![index], onUpdateEncryptedText: () {
+                                          setState(() {});
+                                        }),
+                                      ),
+                                    ),
+                                  );
+                                }
                               );
-                            }
-                          );
-                        },
-                        icon: Icon(Icons.edit),
+                            },
+                            icon: Icon(Icons.edit),
+                          ),
+                        ],
                       ),
                     ],
                   ),
