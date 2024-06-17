@@ -76,7 +76,9 @@ class _DecryptionFormState extends State<DecryptionForm> {
                   onPressed: () {
                     if(_formKey.currentState?.validate() ?? false){
                       final result = Cryptographer.decrypt(_textToDecryptController.text.split(" | ")[0], _textToDecryptController.text.split(" | ")[1], _decryptionPasswordController.text);
-                      _decryptedTextResult.text = result.$2;
+                      setState(() {
+                        _decryptedTextResult.text = result.$2;
+                      });
                     }
                   },
                   child: Text("Decrypt"),
@@ -88,6 +90,26 @@ class _DecryptionFormState extends State<DecryptionForm> {
                   child: Container(
                     height: 100,
                     child: TextField(
+                      decoration: InputDecoration(
+                        prefixIcon: IconButton(
+                          onPressed: _decryptedTextResult.text.isNotEmpty ? () {
+                            showDialog(
+                              context: context, 
+                              builder: (context) {
+                                return Dialog(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(40.0),
+                                    child: SingleChildScrollView(
+                                      child: Text(_decryptedTextResult.text)
+                                    ),
+                                  ),
+                                );
+                              }
+                            );
+                          } : null,
+                          icon: Icon(Icons.remove_red_eye),
+                        ),
+                      ),
                       controller: _decryptedTextResult,
                       readOnly: true,
                       maxLines: null,
