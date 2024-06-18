@@ -2,6 +2,7 @@ import 'package:enc_flutter/services/encrypted_text/encrypted_text_service.dart'
 import 'package:enc_flutter/widgets/decryption/decryption_form.dart';
 import 'package:enc_flutter/widgets/encrypted_texts/delete_encryption_text.dart';
 import 'package:enc_flutter/widgets/encrypted_texts/edit_encrypted_text.dart';
+import 'package:enc_flutter/widgets/reencryption/reencrypt_text_form.dart';
 import 'package:flutter/material.dart';
 import "package:flutter/services.dart";
 
@@ -56,26 +57,6 @@ class _EncryptedTextsListState extends State<EncryptedTextsList>{
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           IconButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    content: Container(
-                                      height: 150,
-                                      child: Center(
-                                        child: DeleteEncryptedText(encryptedText: snapshot.data![0], onDeleteEncryptedText: () {
-                                          setState(() {});
-                                        },),
-                                      ),
-                                    ), 
-                                  );
-                                },
-                              );
-                            },
-                            icon: Icon(Icons.delete),
-                          ),
-                          IconButton(
                             onPressed: () async {
                               await Clipboard.setData(ClipboardData(text: snapshot.data![index].encryptedText));
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -88,6 +69,27 @@ class _EncryptedTextsListState extends State<EncryptedTextsList>{
                                 );
                             }, 
                             icon: Icon(Icons.copy),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context, 
+                                builder: (context) {
+                                  return Dialog(
+                                    child: ReencryptTextForm(textToReencrypt: snapshot.data![index].encryptedText, onReencryptText: (String text) async {
+                                      print(text);
+                                      var result = await EncryptedTextService.updateEncryptedText(snapshot.data![index].id, null, null, text);
+                                      if(result) {
+                                        setState(() {
+                                          Navigator.of(context).pop();
+                                        }); 
+                                      };
+                                    },),
+                                  );
+                                }
+                              );
+                            }, 
+                            icon: Icon(Icons.autorenew),
                           ),
                           IconButton(
                             onPressed: () {
@@ -109,6 +111,26 @@ class _EncryptedTextsListState extends State<EncryptedTextsList>{
                               );
                             },
                             icon: Icon(Icons.edit),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    content: Container(
+                                      height: 150,
+                                      child: Center(
+                                        child: DeleteEncryptedText(encryptedText: snapshot.data![0], onDeleteEncryptedText: () {
+                                          setState(() {});
+                                        },),
+                                      ),
+                                    ), 
+                                  );
+                                },
+                              );
+                            },
+                            icon: Icon(Icons.delete),
                           ),
                         ],
                       ),
