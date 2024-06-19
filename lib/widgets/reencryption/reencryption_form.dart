@@ -1,7 +1,6 @@
-import 'package:enc_flutter/services/cryptographer/cryptographer.dart';
 import 'package:enc_flutter/widgets/encryption/save_encryption_text_form.dart';
+import 'package:enc_flutter/widgets/reencryption/reencrypt_text_form.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class ReencryptionForm extends StatefulWidget {
   @override
@@ -9,38 +8,12 @@ class ReencryptionForm extends StatefulWidget {
 }
 
 class _ReencryptionFormState extends State<ReencryptionForm> {
-  TextEditingController _textToReencryptController = TextEditingController();
-  TextEditingController _reencryptionOldPasswordController = TextEditingController();
-  TextEditingController _reencryptionNewPasswordController = TextEditingController();
-  TextEditingController _reencryptionResult = TextEditingController();
+  bool _reencryptionStatus = false;
+  late String _reencryptionResult;
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    String? _validateTextToReencrypt(String? value){
-      if(value == null || value.isEmpty){
-        return "Enter at least 1 character (/-ц-)/";
-      }
-      return null;
-    }
-    String? _validateRencryptionOldPassword(String? value){
-      if(value == null || value.isEmpty){
-        return "Provide the password (/-ц-)/";
-      }
-      else if(value.length < 12){
-        return "The password must have at least 12 characters (/-ц-)/";
-      }
-      return null;
-    }
-    String? _validateReencryptionNewPassword(String? value){
-      if(value == null || value.isEmpty){
-        return "Provide the password (/-ц-)/";
-      }
-      else if(value.length < 12){
-        return "The password must have at least 12 characters (/-ц-)/";
-      }
-      return null;
-    }
 
     return Center(
       child: SingleChildScrollView(
@@ -50,121 +23,38 @@ class _ReencryptionFormState extends State<ReencryptionForm> {
             key: _formKey,
             child: Column(
               children: [
-                SingleChildScrollView(
-                  child: Container(
-                    height: 100,
-                    child: TextFormField(
-                      controller: _textToReencryptController,
-                      validator: _validateTextToReencrypt,
-                      decoration: InputDecoration(
-                        labelText: "Enter a text to be reencrypted",
-                      ),
-                      maxLines: null,
-                    ),
-                  )
-                ),
-                SizedBox(height: 20),
-                TextFormField(
-                  controller: _reencryptionOldPasswordController,
-                  validator: _validateRencryptionOldPassword,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: "Enter the old password",
-                  ),
-                ),
-                SizedBox(height: 20),
-                TextFormField(
-                  controller: _reencryptionNewPasswordController,
-                  validator: _validateReencryptionNewPassword,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: "Enter the new password",
-                  ),
-                ),
-                SizedBox(height: 20),
+                ReencryptTextForm(onReencryptText: (bool status, String text) {
+                  setState(() {
+                    _reencryptionStatus = status;
+                    if(status) {
+                      _reencryptionResult = text;
+                    }
+                  });
+                }),
+                SizedBox(height: 20,),
                 ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    fixedSize: Size(120, 50),
-                  ),
-                  onPressed: () {
-                    if(_formKey.currentState?.validate() ?? false){
-                      final result = Cryptographer.reencrypt(_textToReencryptController.text.split(" | ")[0], _textToReencryptController.text.split(" | ")[1], _reencryptionOldPasswordController.text, _reencryptionNewPasswordController.text);
-                      _reencryptionResult.text = result.$2;
+                  onPressed: () async {
+                    if(_reencryptionStatus && _reencryptionResult.isNotEmpty){
+                      showDialog(
+                        context: context, 
+                        builder: (context) {
+                          return Dialog(
+                            child: Container(
+                              height: 400,
+                              child: Center(
+                                child: SaveEncryptionTextForm(encryptedTextResult: _reencryptionResult),
+                              ),
+                            )
+                          );
+                        }
+                      );
+                      setState(() {});
                     }
                   },
-                  child: Text("Reencrypt"),
-                ),
-                SingleChildScrollView(
-                  child: Container(
-                    height: 100,
-                    child: TextField(
-                      controller: _reencryptionResult,
-                      readOnly: true,
-                      maxLines: null,
-                    ),
+                  child: Text("Save"),
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: Size(100, 50),
                   ),
-                ),
-                SizedBox(height: 20),
-                Wrap(
-                  spacing: 20,
-                  runSpacing: 20,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () async{
-                        if(_reencryptionResult.text.isNotEmpty){
-                          await Clipboard.setData(ClipboardData(text: _reencryptionResult.text));
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("Copied (/•v•)/!"),
-                              duration: Duration(seconds: 1),
-                              dismissDirection: DismissDirection.horizontal,
-                              showCloseIcon: true,
-                            ),
-                          );
-                        }
-                      },
-                      child: Text("Copy"),
-                      style: ElevatedButton.styleFrom(
-                        fixedSize: Size(100, 50),
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        if(_reencryptionResult.text.isNotEmpty){
-                          showDialog(
-                            context: context, 
-                            builder: (context) {
-                              return Dialog(
-                                child: Container(
-                                  height: 400,
-                                  child: Center(
-                                    child: SaveEncryptionTextForm(encryptedTextResult: _reencryptionResult.text),
-                                  ),
-                                )
-                              );
-                            }
-                          );
-                          setState(() {});
-                        }
-                      },
-                      child: Text("Save"),
-                      style: ElevatedButton.styleFrom(
-                        fixedSize: Size(100, 50),
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        _textToReencryptController.text = "";
-                        _reencryptionOldPasswordController.text = "";
-                        _reencryptionNewPasswordController.text = "";
-                        _reencryptionResult.text = "";
-                      },
-                      child: Text("Clear"),
-                      style: ElevatedButton.styleFrom(
-                        fixedSize: Size(100, 50),
-                      ),
-                    ),
-                  ],
                 ),
               ],
             ),

@@ -1,7 +1,6 @@
 import 'package:enc_flutter/widgets/encryption/encrypt_text_form.dart';
 import 'package:enc_flutter/widgets/encryption/save_encryption_text_form.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class EncryptionForm extends StatefulWidget{
   @override
@@ -14,22 +13,6 @@ class _EncryptionFormState extends State<EncryptionForm> {
 
   @override
   Widget build(BuildContext context) {
-    
-    String? _validateTextToEncrypt(String? value){
-      if(value == null || value.isEmpty){
-        return "Enter at least 1 character (*/-д-)/";
-      }
-      return null;
-    }
-    String? _validateEncryptionPassword(String? value){
-      if(value == null || value.isEmpty){
-        return "Provide a password (*/-д-)/";
-      }
-      else if(value.length < 12){
-        return "The password must have at least 12 characters (*/-д-)/";
-      }
-      return null;
-    }
 
     return Center(
         child: SingleChildScrollView(

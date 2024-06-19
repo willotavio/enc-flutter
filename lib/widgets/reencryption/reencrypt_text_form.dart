@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 
 class ReencryptTextForm extends StatefulWidget {
   final String? textToReencrypt;
-  final Function(String)? onReencryptText;
+  final Function(bool, String)? onReencryptText;
   ReencryptTextForm({this.textToReencrypt, this.onReencryptText});
   @override
   State<ReencryptTextForm> createState() => _ReencryptTextFormState();
@@ -29,21 +29,27 @@ class _ReencryptTextFormState extends State<ReencryptTextForm> {
   Widget build(BuildContext) {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(40.0),
+        padding: const EdgeInsets.all(0.0),
         child: Form(
           key: _formKey,
           child: Column(
             children: [
-              TextFormField(
-                validator: (String? value) {
-                  if(value != null && value.isEmpty) {
-                    return "Enter a text to reencrypt";
-                  }
-                  return null;
-                },
-                controller: _textToReencrypt,
-                decoration: InputDecoration(
-                  label: Text("Text to Reencrypt"),
+              SingleChildScrollView(
+                child: Container(
+                  height: 100,
+                  child: TextFormField(
+                    validator: (String? value) {
+                      if(value != null && value.isEmpty) {
+                        return "Enter a text to reencrypt";
+                      }
+                      return null;
+                    },
+                    controller: _textToReencrypt,
+                    decoration: InputDecoration(
+                      labelText: "Text to Reencrypt",
+                    ),
+                    maxLines: null,
+                  ),
                 ),
               ),
               SizedBox(height: 20,),
@@ -56,7 +62,7 @@ class _ReencryptTextFormState extends State<ReencryptTextForm> {
                 },
                 controller: _oldPassword,
                 decoration: InputDecoration(
-                  label: Text("Old Password"),
+                  labelText: "Old Password",
                 ),
                 obscureText: true,
               ),
@@ -70,7 +76,7 @@ class _ReencryptTextFormState extends State<ReencryptTextForm> {
                 },
                 controller: _newPassword,
                 decoration: InputDecoration(
-                  label: Text("New Password"),
+                  labelText: "New Password",
                 ),
                 obscureText: true,
               ),
@@ -79,7 +85,7 @@ class _ReencryptTextFormState extends State<ReencryptTextForm> {
                 controller: _reencryptionResult,
                 readOnly: true,
                 decoration: InputDecoration(
-                  label: Text("Result"),
+                  labelText: "Result",
                 ),
               ),
               SizedBox(height: 20,),
@@ -91,12 +97,13 @@ class _ReencryptTextFormState extends State<ReencryptTextForm> {
                       _reencryptionResult.text = result.$2;
                     });
                     if(widget.onReencryptText != null && result.$1) {
-                      widget.onReencryptText!(result.$2);
+                      widget.onReencryptText!(result.$1, result.$2);
                     }
                   }
                 }, 
                 child: Text("Reencrypt"),
               ),
+              SizedBox(height: 20,),
               Wrap(
                 spacing: 20,
                 runSpacing: 20,

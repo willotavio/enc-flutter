@@ -76,15 +76,19 @@ class _EncryptedTextsListState extends State<EncryptedTextsList>{
                                 context: context, 
                                 builder: (context) {
                                   return Dialog(
-                                    child: ReencryptTextForm(textToReencrypt: snapshot.data![index].encryptedText, onReencryptText: (String text) async {
-                                      print(text);
-                                      var result = await EncryptedTextService.updateEncryptedText(snapshot.data![index].id, null, null, text);
-                                      if(result) {
-                                        setState(() {
-                                          Navigator.of(context).pop();
-                                        }); 
-                                      };
-                                    },),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(40.0),
+                                      child: ReencryptTextForm(textToReencrypt: snapshot.data![index].encryptedText, onReencryptText: (bool status, String text) async {
+                                        if(status) {
+                                          var result = await EncryptedTextService.updateEncryptedText(snapshot.data![index].id, null, null, text);
+                                          if(result) {
+                                            setState(() {
+                                              Navigator.of(context).pop();
+                                            }); 
+                                          };
+                                        }
+                                      },),
+                                    ),
                                   );
                                 }
                               );
