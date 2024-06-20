@@ -104,10 +104,12 @@ class _EncryptedTextsListState extends State<EncryptedTextsList>{
                                     child: Padding(
                                       padding: const EdgeInsets.all(40.0),
                                       child: Container(
-                                        height: 300,
-                                        child: EditEncryptedText(encryptedText: snapshot.data![index], onUpdateEncryptedText: () {
-                                          setState(() {});
-                                        }),
+                                        height: 500,
+                                        child: Center(
+                                          child: EditEncryptedText(encryptedText: snapshot.data![index], onUpdateEncryptedText: () {
+                                            setState(() {});
+                                          }),
+                                        ),
                                       ),
                                     ),
                                   );
