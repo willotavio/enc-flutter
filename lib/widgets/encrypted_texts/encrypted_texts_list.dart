@@ -125,7 +125,7 @@ class _EncryptedTextsListState extends State<EncryptedTextsList>{
                                 builder: (context) {
                                   return AlertDialog(
                                     content: Container(
-                                      height: 150,
+                                      height: 400,
                                       child: Center(
                                         child: DeleteEncryptedText(encryptedText: snapshot.data![0], onDeleteEncryptedText: () {
                                           setState(() {});

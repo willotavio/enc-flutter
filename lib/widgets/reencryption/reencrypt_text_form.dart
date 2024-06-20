@@ -102,6 +102,9 @@ class _ReencryptTextFormState extends State<ReencryptTextForm> {
                   }
                 }, 
                 child: Text("Reencrypt"),
+                style: ElevatedButton.styleFrom(
+                  fixedSize: Size(150, 50),
+                ),
               ),
               SizedBox(height: 20,),
               Wrap(
@@ -116,6 +119,9 @@ class _ReencryptTextFormState extends State<ReencryptTextForm> {
                       _reencryptionResult.clear();
                     }, 
                     child: Text("Clear"),
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: Size(100, 50),
+                    ),
                   ),
                   ElevatedButton(
                     onPressed: () async {
@@ -132,6 +138,9 @@ class _ReencryptTextFormState extends State<ReencryptTextForm> {
                       }
                     }, 
                     child: Text("Copy"),
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: Size(100, 50),
+                    ),
                   ),
                 ],
               ),
