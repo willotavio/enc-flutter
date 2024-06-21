@@ -2,10 +2,18 @@ import 'package:enc_flutter/services/database/database_helper.dart';
 import 'package:enc_flutter/services/encrypted_text/encrypted_text.dart';
 import 'package:sqflite/sqflite.dart';
 
-class EncryptedTextRepository{
+class EncryptedTextRepository {
+  static Database? _database;
+
+  static Future<void> _initDatabase() async {
+    _database = await DatabaseHelper.instance.database;
+  }
+
   static Future<List<EncryptedText>> getEncryptedTexts() async {
-    Database db = await DatabaseHelper.instance.database;
-    var encryptedTextsList = await db.query("encryptedTexts");
+    if(_database == null) {
+      await _initDatabase();
+    }
+    var encryptedTextsList = await _database!.query("encryptedTexts");
     List<EncryptedText> encryptedTexts = encryptedTextsList.isNotEmpty
       ? encryptedTextsList.map((e) => EncryptedText.fromMap(e)).toList()
       : [];
@@ -13,14 +21,18 @@ class EncryptedTextRepository{
   }
 
   static Future<int> insertEncryptedText(EncryptedText text) async {
-    Database db = await DatabaseHelper.instance.database;
-    return await db.insert("encryptedTexts", text.toMap(text));
+    if(_database == null) {
+      await _initDatabase();
+    }
+    return await _database!.insert("encryptedTexts", text.toMap(text));
   }
 
   static Future<bool> updateEncryptedText(String encryptedTextId, Map<String, dynamic> encryptedTextMap) async {
-    Database db = await DatabaseHelper.instance.database;
+    if(_database == null) {
+      await _initDatabase();
+    }
     try {
-      await db.update("encryptedTexts", encryptedTextMap);
+      await _database!.update("encryptedTexts", encryptedTextMap);
       return true;
     } catch(error) {
       throw Exception(error);
@@ -28,7 +40,9 @@ class EncryptedTextRepository{
   }
 
   static Future<int> deleteEncryptedText(String id) async {
-    Database db = await DatabaseHelper.instance.database;
-    return await db.delete("encryptedTexts", where: "id == ?", whereArgs: [id]);
+    if(_database == null) {
+      await _initDatabase();
+    }
+    return await _database!.delete("encryptedTexts", where: "id == ?", whereArgs: [id]);
   }
 }
