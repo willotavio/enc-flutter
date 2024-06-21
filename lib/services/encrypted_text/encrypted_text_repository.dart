@@ -13,18 +13,26 @@ class EncryptedTextRepository {
     if(_database == null) {
       await _initDatabase();
     }
-    var encryptedTextsList = await _database!.query("encryptedTexts");
-    List<EncryptedText> encryptedTexts = encryptedTextsList.isNotEmpty
-      ? encryptedTextsList.map((e) => EncryptedText.fromMap(e)).toList()
-      : [];
-    return encryptedTexts;
+    try {
+      var encryptedTextsList = await _database!.query("encryptedTexts");
+      List<EncryptedText> encryptedTexts = encryptedTextsList.isNotEmpty
+        ? encryptedTextsList.map((e) => EncryptedText.fromMap(e)).toList()
+        : [];
+      return encryptedTexts;
+    } catch(error) {
+      throw Exception("Failed to get data: $error");
+    }
   }
 
   static Future<int> insertEncryptedText(EncryptedText text) async {
     if(_database == null) {
       await _initDatabase();
     }
-    return await _database!.insert("encryptedTexts", text.toMap(text));
+    try {
+      return await _database!.insert("encryptedTexts", text.toMap(text));
+    } catch(error) {
+      throw Exception("Failed to insert data: $error");
+    }
   }
 
   static Future<bool> updateEncryptedText(String encryptedTextId, Map<String, dynamic> encryptedTextMap) async {
@@ -35,7 +43,7 @@ class EncryptedTextRepository {
       await _database!.update("encryptedTexts", encryptedTextMap);
       return true;
     } catch(error) {
-      throw Exception(error);
+      throw Exception("Failed to updated data: $error");
     }
   }
 
@@ -43,6 +51,10 @@ class EncryptedTextRepository {
     if(_database == null) {
       await _initDatabase();
     }
-    return await _database!.delete("encryptedTexts", where: "id == ?", whereArgs: [id]);
+    try {
+      return await _database!.delete("encryptedTexts", where: "id == ?", whereArgs: [id]);
+    } catch(error) {
+      throw Exception("Failed to delete data: $error");
+    }
   }
 }
