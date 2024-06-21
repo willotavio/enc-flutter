@@ -40,7 +40,7 @@ class EncryptedTextRepository {
       await _initDatabase();
     }
     try {
-      await _database!.update("encryptedTexts", encryptedTextMap);
+      await _database!.update("encryptedTexts", encryptedTextMap, where: "id == ?", whereArgs: [encryptedTextId]);
       return true;
     } catch(error) {
       throw Exception("Failed to updated data: $error");

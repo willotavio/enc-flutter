@@ -48,7 +48,7 @@ class _EncryptedTextsListState extends State<EncryptedTextsList>{
                   },
                   icon: Icon(Icons.lock_open),
                 ),
-                title: Text(snapshot.data![index].title),
+                title: Text("${snapshot.data![index].title}"),
                 children: [
                   Column(
                     children: [
@@ -127,7 +127,7 @@ class _EncryptedTextsListState extends State<EncryptedTextsList>{
                                     content: Container(
                                       height: 400,
                                       child: Center(
-                                        child: DeleteEncryptedText(encryptedText: snapshot.data![0], onDeleteEncryptedText: () {
+                                        child: DeleteEncryptedText(encryptedText: snapshot.data![index], onDeleteEncryptedText: () {
                                           setState(() {});
                                         },),
                                       ),
