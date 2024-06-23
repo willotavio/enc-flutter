@@ -19,6 +19,8 @@ class _EditEncryptedTextState extends State<EditEncryptedText> {
   TextEditingController _password = TextEditingController();
   var _formKey = GlobalKey<FormState>();
 
+  bool _buttonEnabled = false;
+
   @override
   void initState() {
     super.initState();
@@ -53,6 +55,8 @@ class _EditEncryptedTextState extends State<EditEncryptedText> {
                               // what the encrypt form will do after encrypt will be defined by the widget caller
                               child: EncryptTextForm(encryptedResult: widget.encryptedText.encryptedText, onSaveEncryptedText: (String text) {
                                 _encryptedText.text = text;
+                                _buttonEnabled = true;
+                                setState(() {});
                                 // in this case, close the modal
                                 Navigator.of(context).pop();
                               }),
@@ -80,6 +84,16 @@ class _EditEncryptedTextState extends State<EditEncryptedText> {
               decoration: InputDecoration(
                 labelText: "Title",
               ),
+              onChanged: (String? value) {
+                if(value != widget.encryptedText.title) {
+                _buttonEnabled = true;
+                setState(() {});
+              } 
+              else if(value == widget.encryptedText.title) {
+                _buttonEnabled = false;
+                setState(() {});
+              }
+              },
             ),
             SizedBox(height: 20),
             TextFormField(
@@ -87,6 +101,18 @@ class _EditEncryptedTextState extends State<EditEncryptedText> {
               decoration: InputDecoration(
                 labelText: "Description",
               ),
+              onChanged: (String? value) {
+                String? newValue = value == "" ? null : value;
+                if(newValue != widget.encryptedText.description) {
+                  _buttonEnabled = true;
+                  setState(() {});
+                } 
+                else if(newValue == widget.encryptedText.description
+                  || widget.encryptedText.description == null && newValue == "") {
+                  _buttonEnabled = false;
+                  setState(() {});
+                }
+              },
             ),
             SizedBox(height: 20),
             TextFormField(
@@ -108,25 +134,31 @@ class _EditEncryptedTextState extends State<EditEncryptedText> {
               runSpacing: 20,
               children: [
                 ElevatedButton(
-                  onPressed: () async {
+                  onPressed: _buttonEnabled ? () async {
                     if(_formKey.currentState!.validate()) {
-                      // try to decrypt with provided password before update
                       final decryptionResult = Cryptographer.decrypt(widget.encryptedText.encryptedText.split(" | ")[0], widget.encryptedText.encryptedText.split(" | ")[1], _password.text);
                       if(decryptionResult.$1) {
-                        bool result = await EncryptedTextService.updateEncryptedText(widget.encryptedText.id, _title.text, _description.text, _encryptedText.text);
-                        if(result) {
-                          if(widget.onUpdateEncryptedText != null) {
-                            widget.onUpdateEncryptedText!();
+                        String? newEncryptedText = _encryptedText.text.isNotEmpty ? _encryptedText.text : null;
+                        String? newTitle = _title.text.isNotEmpty ? _title.text : null;
+                        String? newDescription = _description.text.isNotEmpty ? _description.text : null;
+                        if(newEncryptedText != widget.encryptedText.encryptedText
+                          || newTitle != widget.encryptedText.title
+                          || newDescription != widget.encryptedText.description) {
+                          bool result = await EncryptedTextService.updateEncryptedText(widget.encryptedText.id, newTitle, newDescription, newEncryptedText);
+                          if(result) {
+                            if(widget.onUpdateEncryptedText != null) {
+                              widget.onUpdateEncryptedText!();
+                            }
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Saved (/•v-)/"),
+                                duration: Duration(seconds: 1),
+                                dismissDirection: DismissDirection.horizontal,
+                                showCloseIcon: true,
+                              ),
+                            );
+                            Navigator.of(context).pop();
                           }
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("Saved (/•v-)/"),
-                              duration: Duration(seconds: 1),
-                              dismissDirection: DismissDirection.horizontal,
-                              showCloseIcon: true,
-                            ),
-                          );
-                          Navigator.of(context).pop();
                         }
                       }
                       else {
@@ -140,7 +172,7 @@ class _EditEncryptedTextState extends State<EditEncryptedText> {
                         );
                       }
                     }
-                  }, 
+                  } : null,
                   child: Text("Update"),
                 ),
                 ElevatedButton(
