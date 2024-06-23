@@ -12,7 +12,9 @@ class EncryptedTextService{
   }
 
   static Future<bool> updateEncryptedText(String encryptedTextId, String? title, String? description, String? encryptedText) async {
-    if(title != null || description != null || encryptedText != null) {
+    if(title != null && title.isNotEmpty 
+      || (description != null && description.isNotEmpty) || description == null
+      || encryptedText != null && encryptedText.isNotEmpty) {
       return EncryptedTextRepository.updateEncryptedText(encryptedTextId, getDynamicEncryptedTextMap(title, description, encryptedText));
     }
     return false;
@@ -28,13 +30,13 @@ class EncryptedTextService{
     String? encryptedText
   ) {
     Map<String, dynamic> dynamicEncryptedTextMap = {};
-    if(title != null) {
+    if(title != null && title.isNotEmpty) {
       dynamicEncryptedTextMap["title"] = title;
     }
-    if(description != null) {
+    if((description != null && description.isNotEmpty) || description == null) {
       dynamicEncryptedTextMap["description"] = description;
     }
-    if(encryptedText != null) {
+    if(encryptedText != null && encryptedText.isNotEmpty) {
       dynamicEncryptedTextMap["encryptedText"] = encryptedText;
     }
     return dynamicEncryptedTextMap;
