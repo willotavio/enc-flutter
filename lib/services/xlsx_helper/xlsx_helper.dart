@@ -5,6 +5,7 @@ class XlsxHelper {
 
   static Excel getEncryptedTextsXLSX(List<EncryptedText> encryptedTextsList) {
     Excel xlsx = Excel.createExcel();
+    xlsx.rename("Sheet1", "Encrypted Texts");
     var encryptedTextsSheet = xlsx["Encrypted Texts"];
     var rows = [
       TextCellValue("ID"),

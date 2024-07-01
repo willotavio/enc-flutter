@@ -1,4 +1,5 @@
 import 'package:enc_flutter/widgets/encrypted_texts/encrypted_texts_list.dart';
+import 'package:enc_flutter/widgets/encrypted_texts/encrypted_texts_screen.dart';
 
 import 'widgets/reencryption/reencryption_screen.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,7 @@ class _HomePageState extends State<HomePage> {
         page = EncrypterScreen();
         break;
       case 1:
-        page = EncryptedTextsList();
+        page = EncryptedTextsScreen();
         break;
       default:
         throw UnimplementedError("No widget for $selectedIndex");

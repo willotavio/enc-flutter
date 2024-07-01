@@ -11,9 +11,9 @@ class EncryptedTextsList extends StatefulWidget{
   State<EncryptedTextsList> createState() => _EncryptedTextsListState();
 }
 
-class _EncryptedTextsListState extends State<EncryptedTextsList>{
+class _EncryptedTextsListState extends State<EncryptedTextsList> {
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Center(
       child: FutureBuilder(
         future: EncryptedTextService.getEncryptedTexts(),
