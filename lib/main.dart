@@ -1,4 +1,3 @@
-import 'package:enc_flutter/widgets/encrypted_texts/encrypted_texts_list.dart';
 import 'package:enc_flutter/widgets/encrypted_texts/encrypted_texts_screen.dart';
 
 import 'widgets/reencryption/reencryption_screen.dart';
