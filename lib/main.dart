@@ -1,5 +1,8 @@
+import 'package:enc_flutter/services/user/user.dart';
+import 'package:enc_flutter/services/user/user_service.dart';
+import 'package:enc_flutter/widgets/auth/login_screen.dart';
+import 'package:enc_flutter/widgets/auth/register_screen.dart';
 import 'package:enc_flutter/widgets/encrypted_texts/encrypted_texts_screen.dart';
-
 import 'widgets/reencryption/reencryption_screen.dart';
 import 'package:flutter/material.dart';
 import './widgets/encryption/encryption_screen.dart';
@@ -9,16 +12,46 @@ void main(){
   runApp(MainApp());
 }
 
-class MainApp extends StatelessWidget{
+class MainApp extends StatefulWidget{
   const MainApp({super.key});
+
   @override
-  Widget build(BuildContext context){
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp(
       title: "Enc-Flutter",
       darkTheme: ThemeData.dark(
         useMaterial3: true
       ),
-      home: HomePage()
+      home: FutureBuilder(
+        future: UserService.getUsers(),
+        builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
+          if(!snapshot.hasData/* snapshot.connectionState == ConnectionState.waiting */) {
+            return Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+          else if(snapshot.hasData && snapshot.data!.isNotEmpty) {
+            print("login");
+            return LoginScreen();
+          }
+          else {
+            print("register");
+            return RegisterScreen();
+          }
+        },
+      ),
+      routes: {
+        '/home': (context) => HomePage(),
+        '/login': (context) => LoginScreen(),
+        '/register': (context) => RegisterScreen(),
+      },
     );
   }
 }
@@ -81,7 +114,10 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: page,
+      body: PopScope(
+        child: page,
+        canPop: false,
+      ),
     );
   }
 }
