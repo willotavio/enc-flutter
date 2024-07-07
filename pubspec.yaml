@@ -44,6 +44,7 @@ dependencies:
   permission_handler: ^11.3.1
   device_info_plus: ^9.1.2
   file_picker: ^8.0.0+1
+  password_dart: ^2.0.1
 
 dev_dependencies:
   flutter_test:
