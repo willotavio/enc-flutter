@@ -7,4 +7,12 @@ class UserService {
     return await UserRepository.getUsers();
   }
 
+  static Future<User?> getUserById(String id) async {
+    return await UserRepository.getUserById(id);
+  }
+
+  static Future<bool> addUser(User newUser) async {
+    return await UserRepository.addUser(newUser.toMap());
+  }
+
 }

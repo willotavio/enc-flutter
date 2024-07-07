@@ -15,6 +15,7 @@ class User {
   String get id => this._id;
   String get username => this._username;
   String get email => this._email;
+  String get password => this._password;
 
   set id(String id) {
     this._id = id;
