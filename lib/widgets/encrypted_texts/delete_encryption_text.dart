@@ -1,7 +1,9 @@
-import 'package:enc_flutter/services/cryptographer/cryptographer.dart';
+import 'dart:convert';
 import 'package:enc_flutter/services/encrypted_text/encrypted_text.dart';
 import 'package:enc_flutter/services/encrypted_text/encrypted_text_service.dart';
+import 'package:enc_flutter/services/user/user_service.dart';
 import 'package:flutter/material.dart';
+import 'package:hashlib/hashlib.dart';
 
 class DeleteEncryptedText extends StatefulWidget {
   final EncryptedText encryptedText;
@@ -27,7 +29,7 @@ class _DeleteEncrypteTextState extends State<DeleteEncryptedText> {
             TextFormField(
               validator: (String? value) {
                 if(value != null && value.isEmpty) {
-                  return "Enter the password from before the changes";
+                  return "Enter your account password";
                 }
                 return null;
               },
@@ -41,8 +43,9 @@ class _DeleteEncrypteTextState extends State<DeleteEncryptedText> {
             ElevatedButton(
               onPressed: () async {
                 if(_formKey.currentState!.validate()) {
-                  final decryptionResult = Cryptographer.decrypt(widget.encryptedText.encryptedText.split(" | ")[0], widget.encryptedText.encryptedText.split(" | ")[1], _password.text);
-                  if(decryptionResult.$1) {
+                  var users = await UserService.getUsers();
+                  final result = bcryptVerify(users[0].password, utf8.encode(_password.text));
+                  if(result) {
                     await EncryptedTextService.deleteEncryptedText(widget.encryptedText.id);
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -60,7 +63,7 @@ class _DeleteEncrypteTextState extends State<DeleteEncryptedText> {
                   else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text("Password is incorrect (|-v-)/"),
+                        content: Text("Wrong password (|-v-)/"),
                         duration: Duration(seconds: 1),
                         dismissDirection: DismissDirection.horizontal,
                         showCloseIcon: true,
