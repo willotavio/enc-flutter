@@ -8,11 +8,11 @@ import 'package:flutter/material.dart';
 import './widgets/encryption/encryption_screen.dart';
 import './widgets/decryption/decryption_screen.dart';
 
-void main(){
+void main() {
   runApp(MainApp());
 }
 
-class MainApp extends StatefulWidget{
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
   @override
@@ -30,7 +30,7 @@ class _MainAppState extends State<MainApp> {
       home: FutureBuilder(
         future: UserService.getUsers(),
         builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
-          if(!snapshot.hasData/* snapshot.connectionState == ConnectionState.waiting */) {
+          if(!snapshot.hasData) {
             return Scaffold(
               body: Center(
                 child: CircularProgressIndicator(),

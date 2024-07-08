@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 import 'package:enc_flutter/main.dart';
 import 'package:enc_flutter/services/user/user.dart';
 import 'package:enc_flutter/services/user/user_service.dart';
 import 'package:flutter/material.dart';
-import 'package:password_dart/password_dart.dart';
+import 'package:hashlib/hashlib.dart';
 import 'package:uuid/uuid.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -84,7 +86,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         id: id, 
                         username: _username.text, 
                         email: _email.text, 
-                        password: Password.hash(_password.text, new PBKDF2())
+                        password: bcrypt(utf8.encode(_password.text), bcryptSalt(security: BcryptSecurity.moderate))
                       );
                       var result = await UserService.addUser(newUser);
                       if(result) {

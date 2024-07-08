@@ -1,7 +1,9 @@
+import 'dart:convert';
+
 import 'package:enc_flutter/main.dart';
 import 'package:enc_flutter/services/user/user_service.dart';
 import 'package:flutter/material.dart';
-import 'package:password_dart/password_dart.dart';
+import 'package:hashlib/hashlib.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -44,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 onPressed: () async {
                   if(_formKey.currentState!.validate()) {
                     var users = await UserService.getUsers();
-                    if(Password.verify(_password.text, users[0].password)) {
+                    if(bcryptVerify(users[0].password, utf8.encode(_password.text))) {
                       Navigator.pushReplacement(
                         context, 
                         MaterialPageRoute(builder: (context) => HomePage()), 

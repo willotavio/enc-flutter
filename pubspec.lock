@@ -216,6 +216,22 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  hashlib:
+    dependency: "direct main"
+    description:
+      name: hashlib
+      sha256: "5037d3b8c36384c03a728543ae67d962a56970c5432a50862279fe68ee4c8411"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.19.1"
+  hashlib_codecs:
+    dependency: transitive
+    description:
+      name: hashlib_codecs
+      sha256: "2b570061f5a4b378425be28a576c1e11783450355ad4345a19f606ff3d96db0f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.5.0"
   image:
     dependency: transitive
     description:
@@ -264,14 +280,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.10.0"
-  password_dart:
-    dependency: "direct main"
-    description:
-      name: password_dart
-      sha256: ca7de1298164ff2681a32dc2512177667d3ffd2c125075f371dd3dee813f11d4
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.1"
   path:
     dependency: "direct main"
     description:
