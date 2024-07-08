@@ -1,8 +1,11 @@
-import 'package:enc_flutter/services/cryptographer/cryptographer.dart';
+import 'dart:convert';
+
 import 'package:enc_flutter/services/encrypted_text/encrypted_text.dart';
 import 'package:enc_flutter/services/encrypted_text/encrypted_text_service.dart';
+import 'package:enc_flutter/services/user/user_service.dart';
 import 'package:enc_flutter/widgets/encryption/encrypt_text_form.dart';
 import 'package:flutter/material.dart';
+import 'package:hashlib/hashlib.dart';
 
 class EditEncryptedText extends StatefulWidget {
   final EncryptedText encryptedText;
@@ -118,7 +121,7 @@ class _EditEncryptedTextState extends State<EditEncryptedText> {
             TextFormField(
               validator: (String? value) {
                 if(value != null && value.isEmpty) {
-                  return "Enter the password from before the changes";
+                  return "Enter your account password";
                 }
                 return null;
               },
@@ -136,8 +139,8 @@ class _EditEncryptedTextState extends State<EditEncryptedText> {
                 ElevatedButton(
                   onPressed: _buttonEnabled ? () async {
                     if(_formKey.currentState!.validate()) {
-                      final decryptionResult = Cryptographer.decrypt(widget.encryptedText.encryptedText.split(" | ")[0], widget.encryptedText.encryptedText.split(" | ")[1], _password.text);
-                      if(decryptionResult.$1) {
+                      var users = await UserService.getUsers();
+                      if(bcryptVerify(users[0].password, utf8.encode(_password.text))) {
                         String? newEncryptedText = _encryptedText.text.isNotEmpty ? _encryptedText.text : null;
                         String? newTitle = _title.text.isNotEmpty ? _title.text : null;
                         String? newDescription = _description.text.isNotEmpty ? _description.text : null;
@@ -164,7 +167,7 @@ class _EditEncryptedTextState extends State<EditEncryptedText> {
                       else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text("Password is incorrect (|-v-)/"),
+                            content: Text("Wrong password (|-v-)/"),
                             duration: Duration(seconds: 1),
                             dismissDirection: DismissDirection.horizontal,
                             showCloseIcon: true,

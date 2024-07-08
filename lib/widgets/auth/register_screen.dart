@@ -90,10 +90,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       );
                       var result = await UserService.addUser(newUser);
                       if(result) {
-                        var createdUser = await UserService.getUserById(id);
-                        print(
-                          "User created:\n $createdUser"
-                        );
                         Navigator.pushAndRemoveUntil(
                         context, 
                         MaterialPageRoute(builder: (context) => HomePage()), 
