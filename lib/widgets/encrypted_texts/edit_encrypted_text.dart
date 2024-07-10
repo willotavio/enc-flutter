@@ -177,12 +177,18 @@ class _EditEncryptedTextState extends State<EditEncryptedText> {
                     }
                   } : null,
                   child: Text("Update"),
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: Size(100, 50),
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: () async {
                     Navigator.of(context).pop();
                   }, 
                   child: Text("Cancel"),
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: Size(100, 50),
+                  ),
                 ),
               ],
             ),

@@ -100,19 +100,37 @@ class _EncryptedTextsListState extends State<EncryptedTextsList> {
                               showDialog(
                                 context: context, 
                                 builder: (context) {
-                                  return Dialog(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(40.0),
-                                      child: Container(
-                                        height: 500,
-                                        child: Center(
-                                          child: EditEncryptedText(encryptedText: snapshot.data![index], onUpdateEncryptedText: () {
-                                            setState(() {});
-                                          }),
-                                        ),
-                                      ),
-                                    ),
+                                  return ScaffoldMessenger(
+                                    child: Builder(builder: (context) {
+                                      return Scaffold(
+                                        backgroundColor: Colors.transparent,
+                                        body: GestureDetector(
+                                          behavior: HitTestBehavior.opaque,
+                                          onTap: () => Navigator.of(context).pop(),
+                                          child: GestureDetector(
+                                            onTap: () {},
+                                            child: AlertDialog(
+                                              content: GestureDetector(
+                                                child: 
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(40.0),
+                                                    child: Container(
+                                                      height: 500,
+                                                      child: Center(
+                                                        child: EditEncryptedText(encryptedText: snapshot.data![index], onUpdateEncryptedText: () {
+                                                          setState(() {});
+                                                        }),
+                                                      ),
+                                                    ),
+                                                  ),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      );
+                                    }),
                                   );
+                                  
                                 }
                               );
                             },
@@ -123,15 +141,29 @@ class _EncryptedTextsListState extends State<EncryptedTextsList> {
                               showDialog(
                                 context: context,
                                 builder: (context) {
-                                  return AlertDialog(
-                                    content: Container(
-                                      height: 400,
-                                      child: Center(
-                                        child: DeleteEncryptedText(encryptedText: snapshot.data![index], onDeleteEncryptedText: () {
-                                          setState(() {});
-                                        },),
-                                      ),
-                                    ), 
+                                  return ScaffoldMessenger(
+                                    child: Builder(builder: (context) {
+                                      return Scaffold(
+                                        backgroundColor: Colors.transparent,
+                                        body: GestureDetector(
+                                          behavior: HitTestBehavior.opaque,
+                                          onTap: () => Navigator.of(context).pop(),
+                                          child: GestureDetector(
+                                            onTap: () {},
+                                            child: AlertDialog(
+                                              content: Container(
+                                                height: 400,
+                                                child: Center(
+                                                  child: DeleteEncryptedText(encryptedText: snapshot.data![index], onDeleteEncryptedText: () {
+                                                    setState(() {});
+                                                  },),
+                                                ),
+                                              ), 
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }),
                                   );
                                 },
                               );
