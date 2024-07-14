@@ -188,6 +188,7 @@ class _EditEncryptedTextState extends State<EditEncryptedText> {
                   child: Text("Cancel"),
                   style: ElevatedButton.styleFrom(
                     fixedSize: Size(100, 50),
+                    backgroundColor: Colors.red
                   ),
                 ),
               ],

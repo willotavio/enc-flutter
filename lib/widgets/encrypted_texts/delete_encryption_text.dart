@@ -75,6 +75,7 @@ class _DeleteEncrypteTextState extends State<DeleteEncryptedText> {
               child: Text("Delete"),
               style: ElevatedButton.styleFrom(
                 fixedSize: Size(100, 50),
+                backgroundColor: Colors.red
               ),
             ),
           ],

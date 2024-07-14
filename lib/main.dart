@@ -24,29 +24,53 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Enc-Flutter",
-      darkTheme: ThemeData.dark(
-        useMaterial3: true
+      theme: ThemeData(
+        colorScheme: ColorScheme.light(
+          primary: Colors.indigoAccent,
+        ),
+        primaryColor: Colors.indigoAccent,
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.indigoAccent),
+            foregroundColor: MaterialStateProperty.all(Colors.white),
+          )
+        )
       ),
-      home: FutureBuilder(
+      darkTheme: ThemeData.dark(
+        useMaterial3: true,
+      ).copyWith(
+        colorScheme: ColorScheme.dark(
+          primary: Colors.indigoAccent
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.indigoAccent),
+            foregroundColor: MaterialStateProperty.all(Colors.white),
+          )
+        )
+      ),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text("EncUrStuff", style: TextStyle(fontSize: 18)),
+          backgroundColor: Colors.indigoAccent,
+          foregroundColor: Colors.white,
+        ),
+        body: FutureBuilder(
         future: UserService.getUsers(),
         builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
           if(!snapshot.hasData) {
-            return Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
+            return Center(
+              child: CircularProgressIndicator(),
             );
           }
           else if(snapshot.hasData && snapshot.data!.isNotEmpty) {
-            print("login");
             return LoginScreen();
           }
           else {
-            print("register");
             return RegisterScreen();
           }
         },
-      ),
+      ),),
       routes: {
         '/home': (context) => HomePage(),
         '/login': (context) => LoginScreen(),
@@ -79,6 +103,8 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("EncUrStuff", style: TextStyle(fontSize: 18)),
+          backgroundColor: Colors.indigoAccent,
+          foregroundColor: Colors.white,
       ),
       drawer: Drawer(
         child: ListView(

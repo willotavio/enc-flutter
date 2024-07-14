@@ -17,56 +17,59 @@ class EncryptedTextsScreen extends StatefulWidget {
 class _EncryptedTextsListState extends State<EncryptedTextsScreen> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ElevatedButton(
-          onPressed: () async {
-            bool permissionGranted = await PermissionHelper.requestStoragePermission();
-            if(permissionGranted) {
-              String? pathToSave = await FilePicker.platform.getDirectoryPath();
-              if(pathToSave != null) {
-                Excel xlsx = XlsxHelper.getEncryptedTextsXLSX(await EncryptedTextService.getEncryptedTexts());
-                var now = DateTime.now();
-                File file = File("$pathToSave/encrypted-texts-${now.year}-${now.month}-${now.day}-${now.hour}-${now.minute}-${now.second}.xlsx");
-                var saved = xlsx.save();
-                if(saved != null) {
-                  file.writeAsBytes(saved);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 40.0, 0, 40.0),
+      child: Column(
+        children: [
+          ElevatedButton(
+            onPressed: () async {
+              bool permissionGranted = await PermissionHelper.requestStoragePermission();
+              if(permissionGranted) {
+                String? pathToSave = await FilePicker.platform.getDirectoryPath();
+                if(pathToSave != null) {
+                  Excel xlsx = XlsxHelper.getEncryptedTextsXLSX(await EncryptedTextService.getEncryptedTexts());
+                  var now = DateTime.now();
+                  File file = File("$pathToSave/encrypted-texts-${now.year}-${now.month}-${now.day}-${now.hour}-${now.minute}-${now.second}.xlsx");
+                  var saved = xlsx.save();
+                  if(saved != null) {
+                    file.writeAsBytes(saved);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("XLSX saved in the chosen folder (/>v<)/!"),
+                        duration: Duration(seconds: 1),
+                        dismissDirection: DismissDirection.horizontal,
+                        showCloseIcon: true,
+                      ),
+                    );
+                  }
+                }
+                else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("XLSX saved in the chosen folder (/>v<)/!"),
-                      duration: Duration(seconds: 1),
-                      dismissDirection: DismissDirection.horizontal,
-                      showCloseIcon: true,
-                    ),
-                  );
+                      SnackBar(
+                        content: Text("XLSX not saved (/-д-)_!"),
+                        duration: Duration(seconds: 1),
+                        dismissDirection: DismissDirection.horizontal,
+                        showCloseIcon: true,
+                      ),
+                    );
                 }
               }
               else {
                 ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("XLSX not saved (/-д-)_!"),
-                      duration: Duration(seconds: 1),
-                      dismissDirection: DismissDirection.horizontal,
-                      showCloseIcon: true,
-                    ),
-                  );
+                  SnackBar(
+                    content: Text("Permission not granted"),
+                    duration: Duration(seconds: 1),
+                    dismissDirection: DismissDirection.horizontal,
+                    showCloseIcon: true,
+                  ),
+                );
               }
-            }
-            else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text("Permission not granted"),
-                  duration: Duration(seconds: 1),
-                  dismissDirection: DismissDirection.horizontal,
-                  showCloseIcon: true,
-                ),
-              );
-            }
-          },
-          child: Text("Generate XLSX"),
-        ),
-        Expanded(child: EncryptedTextsList()),
-      ],
+            },
+            child: Text("Generate XLSX"),
+          ),
+          Expanded(child: EncryptedTextsList()),
+        ],
+      ),
     );
   }
 }
