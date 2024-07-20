@@ -33,6 +33,7 @@ class _MainAppState extends State<MainApp> {
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.indigoAccent),
             foregroundColor: MaterialStateProperty.all(Colors.white),
+            overlayColor: MaterialStateProperty.all(Color.fromARGB(255, 50, 100, 253)),
           )
         )
       ),
@@ -46,6 +47,7 @@ class _MainAppState extends State<MainApp> {
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.indigoAccent),
             foregroundColor: MaterialStateProperty.all(Colors.white),
+            overlayColor: MaterialStateProperty.all(Color.fromARGB(255, 50, 100, 253)),
           )
         )
       ),

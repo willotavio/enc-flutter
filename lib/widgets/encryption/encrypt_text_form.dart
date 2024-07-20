@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 
 class EncryptTextForm extends StatefulWidget {
   final String ? encryptedResult;
-  final Function(String) ? onSaveEncryptedText;
+  final Function(String, String) ? onSaveEncryptedText;
   EncryptTextForm({this.encryptedResult, this.onSaveEncryptedText, Key ? key}) : super(key:key);
   @override
   State<EncryptTextForm> createState() => _EncryptTextFormState();
@@ -13,6 +13,16 @@ class EncryptTextForm extends StatefulWidget {
 class _EncryptTextFormState extends State<EncryptTextForm> {
   TextEditingController _textToEncrypt = TextEditingController();
   TextEditingController _encryptionPassword = TextEditingController();
+  
+  List<String> _encryptionMethods = [
+    "AES-128-CBC",
+    "AES-192-CBC",
+    "AES-256-CBC"
+  ];
+
+  List<DropdownMenuItem> _encryptionMethodsDropdown = [];
+  late String _encryptionMethod;
+
   TextEditingController _encryptedResult = TextEditingController();
   var _formKey = GlobalKey<FormState>();
 
@@ -22,6 +32,18 @@ class _EncryptTextFormState extends State<EncryptTextForm> {
     if(widget.encryptedResult != null && widget.encryptedResult!.isNotEmpty) {
       this._encryptedResult.text = widget.encryptedResult!;
     }
+    List<DropdownMenuItem> _encryptionMethodsDropdownList = [];
+    for(int i = 0; i < _encryptionMethods.length; i++) {
+      _encryptionMethodsDropdownList.add(
+        DropdownMenuItem(
+          child: Text(_encryptionMethods[i]),
+          value: _encryptionMethods[i],
+        ),
+      );
+    } 
+    setState(() {
+      _encryptionMethodsDropdown = _encryptionMethodsDropdownList;
+    });
   }
 
   @override
@@ -68,17 +90,33 @@ class _EncryptTextFormState extends State<EncryptTextForm> {
               obscureText: true,
             ),
             SizedBox(height: 20),
+            DropdownButtonFormField(
+              hint: Text("Select an encryption method"),
+              validator: (dynamic value) {
+                if(value == null) {
+                  return "Choose a valid option";
+                }
+                return null;
+              },
+              items: _encryptionMethodsDropdown,
+              onChanged: (dynamic value) {
+                setState(() {
+                  _encryptionMethod = value;
+                });
+              }
+            ),
+            SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 if(_formKey.currentState!.validate()) {
                   setState(() {
-                    var result = Cryptographer.encrypt(_textToEncrypt.text, _encryptionPassword.text);
+                    var result = Cryptographer.encrypt(_textToEncrypt.text, _encryptionPassword.text, _encryptionMethod);
                     if(result.$1) {
                       _encryptedResult.text = result.$2;
                     }
                   });
                   if(widget.onSaveEncryptedText != null) {
-                    widget.onSaveEncryptedText!(_encryptedResult.text);
+                    widget.onSaveEncryptedText!(_encryptedResult.text, _encryptionMethod);
                   }
                 }
               },

@@ -9,11 +9,12 @@ class Cryptographer{
     return (json["status"] as bool, json["message"] as String);
   }
 
-  static (bool, String) encrypt(String textToEncrypt, String password){
+  static (bool, String) encrypt(String textToEncrypt, String password, String encryptionMethod){
     try{
+      int keyLength = getKeyLength(encryptionMethod);
       if(textToEncrypt.isNotEmpty && password.length >= 12){
         final salt = generateSalt();
-        final keyAndIv = deriveKeyAndIv(password, salt);
+        final keyAndIv = deriveKeyAndIv(password, salt, keyLength);
         final Uint8List keyBytes = keyAndIv["key"]!;
         final Uint8List ivBytes = keyAndIv["iv"]!;
 
@@ -45,16 +46,17 @@ class Cryptographer{
       }
     }
     catch(error){
-      return cryptographerResult({ "status": false, "message": "Error (*>•л•)>" });
+      return cryptographerResult({ "status": false, "message": "Error (*>•л•)> - ${error}" });
     }
   }
 
-  static (bool, String) decrypt(String encryptedText, String base64Salt, String password){
+  static (bool, String) decrypt(String encryptedText, String base64Salt, String password, String encryptionMethod){
     try{
+      int keyLength = getKeyLength(encryptionMethod);
       if(encryptedText.isNotEmpty && base64Salt.isNotEmpty && password.length >= 12){
         final salt = base64.decode(base64Salt);
         
-        final keyAndIv = deriveKeyAndIv(password, salt);
+        final keyAndIv = deriveKeyAndIv(password, salt, keyLength);
         final Uint8List keyBytes = keyAndIv["key"]!;
         final Uint8List ivBytes = keyAndIv["iv"]!;
         
@@ -86,24 +88,24 @@ class Cryptographer{
       }
     }
     catch(error){
-      return cryptographerResult({ "status": false, "message": "Error (*>•л•)>" });
+      return cryptographerResult({ "status": false, "message": "Error (*>•л•)> - ${error}" });
     }
   }
 
-  static (bool, String) reencrypt(String encryptedText, String base64Salt, String oldPassword, String newPassword){
+  static (bool, String) reencrypt(String encryptedText, String base64Salt, String oldPassword, String newPassword, String previousEncryptionMethod, String newEncryptionMethod){
     try{
-      final decryptedInfo = decrypt(encryptedText, base64Salt, oldPassword);
+      final decryptedInfo = decrypt(encryptedText, base64Salt, oldPassword, previousEncryptionMethod);
       if(!decryptedInfo.$1){
         return cryptographerResult({ "status": false, "message": "Error (*>•л•)>" });
       }
-      final reencryptedInfo = encrypt(decryptedInfo.$2, newPassword);
+      final reencryptedInfo = encrypt(decryptedInfo.$2, newPassword, newEncryptionMethod);
       if(!reencryptedInfo.$1){
         return cryptographerResult({ "status": false, "message": "Error (*>•л•)>" });
       }
       return reencryptedInfo;
     }
     catch(error){
-      return cryptographerResult({ "status": false, "message": "Error (*>•л•)>" });
+      return cryptographerResult({ "status": false, "message": "Error (*>•л•)> - ${error}" });
     }
   }
 
@@ -121,10 +123,22 @@ class Cryptographer{
     }
   }
 
-  static Map<String, Uint8List> deriveKeyAndIv(String password, Uint8List salt){
+  static int getKeyLength(String encryptionMethod) {
+    switch(encryptionMethod) {
+      case "AES-128-CBC":
+        return 16;
+      case "AES-192-CBC":
+        return 24;
+      case "AES-256-CBC":
+        return 32;
+      default: 
+        throw Exception("Invalid encryption method");
+    }
+  }
+
+  static Map<String, Uint8List> deriveKeyAndIv(String password, Uint8List salt, int keyLength){
     try{
       const iterations = 10000;
-      const keyLength = 16;
       const ivLength = 16;
 
       final pbkdf2Parameters = Pbkdf2Parameters(

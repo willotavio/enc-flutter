@@ -9,6 +9,7 @@ class EncryptionForm extends StatefulWidget{
 
 class _EncryptionFormState extends State<EncryptionForm> {
   TextEditingController _encryptedTextResult = TextEditingController();
+  TextEditingController _encryptionMethod = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -22,8 +23,9 @@ class _EncryptionFormState extends State<EncryptionForm> {
               key: _formKey,
               child: Column(
                 children: [
-                  EncryptTextForm(onSaveEncryptedText: (String text) {
-                    _encryptedTextResult.text = text;
+                  EncryptTextForm(onSaveEncryptedText: (String encryptedText, String encryptionMethod) {
+                    _encryptedTextResult.text = encryptedText;
+                    _encryptionMethod.text = encryptionMethod;
                   }),
                   SizedBox(height: 20),
                   ElevatedButton(
@@ -35,7 +37,7 @@ class _EncryptionFormState extends State<EncryptionForm> {
                             return Dialog(
                               child: Container(
                                 height: 400,
-                                child: SaveEncryptionTextForm(encryptedTextResult: _encryptedTextResult.text)
+                                child: SaveEncryptionTextForm(encryptedTextResult: _encryptedTextResult.text, encryptionMethod: _encryptionMethod.text,)
                               ),
                             );
                           }

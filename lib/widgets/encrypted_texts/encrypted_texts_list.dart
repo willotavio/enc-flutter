@@ -40,7 +40,7 @@ class _EncryptedTextsListState extends State<EncryptedTextsList> {
                         return Dialog(
                           child: Container(
                             height: 600,
-                            child: DecryptionForm(encryptedText: snapshot.data![index].encryptedText)
+                            child: DecryptionForm(encryptedText: snapshot.data![index].encryptedText, encryptionMethod: snapshot.data![index].encryptionMethod)
                           ),
                         );
                       }
@@ -52,7 +52,7 @@ class _EncryptedTextsListState extends State<EncryptedTextsList> {
                 children: [
                   Column(
                     children: [
-                      Text(snapshot.data![index].description ?? ""),
+                      Text("${snapshot.data![index].description ?? "No description"} - ${snapshot.data![index].encryptionMethod}"),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -76,11 +76,11 @@ class _EncryptedTextsListState extends State<EncryptedTextsList> {
                                 context: context, 
                                 builder: (context) {
                                   return Dialog(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(40.0),
-                                      child: ReencryptTextForm(textToReencrypt: snapshot.data![index].encryptedText, onReencryptText: (bool status, String text) async {
+                                    child: Container(
+                                      height: 600,
+                                      child: ReencryptTextForm(textToReencrypt: snapshot.data![index].encryptedText, currentEncryptionMethod: snapshot.data![index].encryptionMethod, onReencryptText: (bool status, String reencryptionResult, String newEncryptionMethod) async {
                                         if(status) {
-                                          var result = await EncryptedTextService.updateEncryptedText(snapshot.data![index].id, null, null, text);
+                                          var result = await EncryptedTextService.updateEncryptedText(snapshot.data![index].id, null, null, reencryptionResult, newEncryptionMethod);
                                           if(result) {
                                             setState(() {
                                               Navigator.of(context).pop();
@@ -111,18 +111,14 @@ class _EncryptedTextsListState extends State<EncryptedTextsList> {
                                             onTap: () {},
                                             child: AlertDialog(
                                               content: GestureDetector(
-                                                child: 
-                                                  Padding(
-                                                    padding: const EdgeInsets.all(40.0),
-                                                    child: Container(
-                                                      height: 500,
-                                                      child: Center(
-                                                        child: EditEncryptedText(encryptedText: snapshot.data![index], onUpdateEncryptedText: () {
-                                                          setState(() {});
-                                                        }),
-                                                      ),
-                                                    ),
+                                                child: Container(
+                                                  height: 600,
+                                                  child: Center(
+                                                    child: EditEncryptedText(encryptedText: snapshot.data![index], onUpdateEncryptedText: () {
+                                                      setState(() {});
+                                                    }),
                                                   ),
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -130,7 +126,6 @@ class _EncryptedTextsListState extends State<EncryptedTextsList> {
                                       );
                                     }),
                                   );
-                                  
                                 }
                               );
                             },

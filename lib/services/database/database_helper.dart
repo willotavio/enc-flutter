@@ -12,7 +12,7 @@ class DatabaseHelper {
     String path = join(await getDatabasesPath(), "enc_ur_stuff.db");
     return await openDatabase(
       path,
-      version: 2,
+      version: 3,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
@@ -54,5 +54,10 @@ class DatabaseHelper {
         )
       ''');
     },
+    3: (Database db) async {
+      db.execute('''
+        ALTER TABLE encryptedTexts ADD COLUMN encryptionMethod TEXT NOT NULL DEFAULT "AES-128-CBC"
+      ''');
+    }
   };
 }

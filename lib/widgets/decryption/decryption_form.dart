@@ -4,7 +4,8 @@ import 'package:flutter/services.dart';
 
 class DecryptionForm extends StatefulWidget {
   final String? encryptedText;
-  DecryptionForm({this.encryptedText});
+  final String? encryptionMethod;
+  DecryptionForm({this.encryptedText, this.encryptionMethod});
   @override
   State<DecryptionForm> createState() => _DecryptionFormState();
 }
@@ -12,6 +13,16 @@ class DecryptionForm extends StatefulWidget {
 class _DecryptionFormState extends State<DecryptionForm> {
   TextEditingController _textToDecryptController = TextEditingController();
   TextEditingController _decryptionPasswordController = TextEditingController();
+
+  List<String> _encryptionMethods = [
+    "AES-128-CBC",
+    "AES-192-CBC",
+    "AES-256-CBC"
+  ];
+
+  List<DropdownMenuItem> _encryptionMethodsDropdown = [];
+  String? _encryptionMethod;
+
   TextEditingController _decryptedTextResult = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -21,6 +32,21 @@ class _DecryptionFormState extends State<DecryptionForm> {
     if(widget.encryptedText != null) {
       _textToDecryptController.text = widget.encryptedText!;
     }
+    if(widget.encryptionMethod != null) {
+      _encryptionMethod = widget.encryptionMethod!;
+    }
+    List<DropdownMenuItem> _encryptionMethodsDropdownList = [];
+    for(int i = 0; i < _encryptionMethods.length; i++) {
+      _encryptionMethodsDropdownList.add(
+        DropdownMenuItem(
+          child: Text(_encryptionMethods[i]),
+          value: _encryptionMethods[i],
+        ),
+      );
+    } 
+    setState(() {
+      _encryptionMethodsDropdown = _encryptionMethodsDropdownList;
+    });
   }
 
   @override
@@ -44,7 +70,7 @@ class _DecryptionFormState extends State<DecryptionForm> {
     return Center(
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(50.0),
+          padding: const EdgeInsets.all(40.0),
           child: Form(
             key: _formKey,
             child: Column(
@@ -72,10 +98,27 @@ class _DecryptionFormState extends State<DecryptionForm> {
                   ),
                 ),
                 SizedBox(height: 20),
+                DropdownButtonFormField(
+                  value: _encryptionMethod ?? null,
+                  hint: Text("Select an encryption method"),
+                  validator: (dynamic value) {
+                    if(value == null) {
+                      return "Choose a valid option";
+                    }
+                    return null;
+                  },
+                  items: _encryptionMethodsDropdown,
+                  onChanged: (dynamic value) {
+                    setState(() {
+                      _encryptionMethod = value;
+                    });
+                  }
+                ),
+                SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     if(_formKey.currentState?.validate() ?? false){
-                      final result = Cryptographer.decrypt(_textToDecryptController.text.split(" | ")[0], _textToDecryptController.text.split(" | ")[1], _decryptionPasswordController.text);
+                      final result = Cryptographer.decrypt(_textToDecryptController.text.split(" | ")[0], _textToDecryptController.text.split(" | ")[1], _decryptionPasswordController.text, _encryptionMethod!);
                       setState(() {
                         _decryptedTextResult.text = result.$2;
                       });

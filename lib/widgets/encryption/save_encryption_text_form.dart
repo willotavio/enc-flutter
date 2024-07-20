@@ -5,7 +5,8 @@ import 'package:uuid/uuid.dart';
 
 class SaveEncryptionTextForm extends StatefulWidget{
   final String encryptedTextResult;
-  SaveEncryptionTextForm({required this.encryptedTextResult, Key? key}) : super(key: key);
+  final String encryptionMethod;
+  SaveEncryptionTextForm({required this.encryptedTextResult, required String this.encryptionMethod, Key? key}) : super(key: key);
   @override
   State<SaveEncryptionTextForm> createState() => _SaveEncryptionTextForm();
 }
@@ -51,7 +52,7 @@ class _SaveEncryptionTextForm extends State<SaveEncryptionTextForm> {
             ElevatedButton(
               onPressed: () async {
                 if(_formKey.currentState!.validate()) {
-                  await EncryptedTextService.insertEncryptedText(EncryptedText(id: Uuid().v4(), title: _title.text, description: _description.text.isNotEmpty ? _description.text : null, encryptedText: widget.encryptedTextResult));
+                  await EncryptedTextService.insertEncryptedText(EncryptedText(id: Uuid().v4(), title: _title.text, description: _description.text.isNotEmpty ? _description.text : null, encryptedText: widget.encryptedTextResult, encryptionMethod: widget.encryptionMethod));
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text("Saved (/•v-)/"),
@@ -64,6 +65,9 @@ class _SaveEncryptionTextForm extends State<SaveEncryptionTextForm> {
                 }
               },
               child: Text("Confirm"),
+              style: ButtonStyle(
+                fixedSize: MaterialStateProperty.all(Size(100, 50)),
+              ),
             ),
           ]
         ),

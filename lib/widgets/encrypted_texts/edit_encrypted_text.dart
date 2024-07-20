@@ -22,12 +22,16 @@ class _EditEncryptedTextState extends State<EditEncryptedText> {
   TextEditingController _password = TextEditingController();
   var _formKey = GlobalKey<FormState>();
 
+
+  late String _encryptionMethod;
+
   bool _buttonEnabled = false;
 
   @override
   void initState() {
     super.initState();
     _title.text = widget.encryptedText.title;
+    _encryptionMethod = widget.encryptedText.encryptionMethod;
     if(widget.encryptedText.description != null) {
       _description.text = widget.encryptedText.description!;
     }
@@ -56,8 +60,9 @@ class _EditEncryptedTextState extends State<EditEncryptedText> {
                             child: Padding(
                               padding: const EdgeInsets.all(40.0),
                               // what the encrypt form will do after encrypt will be defined by the widget caller
-                              child: EncryptTextForm(encryptedResult: widget.encryptedText.encryptedText, onSaveEncryptedText: (String text) {
-                                _encryptedText.text = text;
+                              child: EncryptTextForm(encryptedResult: widget.encryptedText.encryptedText, onSaveEncryptedText: (String encryptionResult, String newEncryptionMethod) {
+                                _encryptedText.text = encryptionResult;
+                                _encryptionMethod = newEncryptionMethod;
                                 _buttonEnabled = true;
                                 setState(() {});
                                 // in this case, close the modal
@@ -144,10 +149,12 @@ class _EditEncryptedTextState extends State<EditEncryptedText> {
                         String? newEncryptedText = _encryptedText.text.isNotEmpty ? _encryptedText.text : null;
                         String? newTitle = _title.text.isNotEmpty ? _title.text : null;
                         String? newDescription = _description.text.isNotEmpty ? _description.text : null;
+                        String? newEncryptionMethod = _encryptionMethod.isNotEmpty ? _encryptionMethod : null;
                         if(newEncryptedText != widget.encryptedText.encryptedText
                           || newTitle != widget.encryptedText.title
-                          || newDescription != widget.encryptedText.description) {
-                          bool result = await EncryptedTextService.updateEncryptedText(widget.encryptedText.id, newTitle, newDescription, newEncryptedText);
+                          || newDescription != widget.encryptedText.description
+                          || newEncryptionMethod != widget.encryptedText.encryptionMethod) {
+                          bool result = await EncryptedTextService.updateEncryptedText(widget.encryptedText.id, newTitle, newDescription, newEncryptedText, _encryptionMethod);
                           if(result) {
                             if(widget.onUpdateEncryptedText != null) {
                               widget.onUpdateEncryptedText!();
@@ -179,6 +186,7 @@ class _EditEncryptedTextState extends State<EditEncryptedText> {
                   child: Text("Update"),
                   style: ElevatedButton.styleFrom(
                     fixedSize: Size(100, 50),
+                    disabledBackgroundColor: Colors.grey,
                   ),
                 ),
                 ElevatedButton(
@@ -186,9 +194,10 @@ class _EditEncryptedTextState extends State<EditEncryptedText> {
                     Navigator.of(context).pop();
                   }, 
                   child: Text("Cancel"),
-                  style: ElevatedButton.styleFrom(
-                    fixedSize: Size(100, 50),
-                    backgroundColor: Colors.red
+                  style: ButtonStyle(
+                    fixedSize: MaterialStateProperty.all(Size(100, 50)),
+                    backgroundColor: MaterialStateProperty.all(Colors.red),
+                    overlayColor: MaterialStateProperty.all(Color.fromARGB(255, 244, 40, 54)),
                   ),
                 ),
               ],
